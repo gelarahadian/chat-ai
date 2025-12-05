@@ -1,13 +1,18 @@
 import { Badge } from '@/src/components/ui/badge';
-import { FC } from 'react'
+import { FC, useEffect, useRef } from "react";
 
 interface ListChatProps {
-    messages: any
+  messages: any;
 }
 
-const ListChat: FC<ListChatProps> = ({messages}) => {
+const ListChat: FC<ListChatProps> = ({ messages }) => {
+  const bottomRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "auto" });
+  }, []);
   return (
-    <div className="max-w-5xl mx-auto space-y-5">
+    <div ref={bottomRef} className="max-w-5xl mx-auto space-y-5 pb-28">
       {messages?.map((message: any) => (
         <div key={message._id}>
           {message.role === "user" ? (
@@ -21,8 +26,9 @@ const ListChat: FC<ListChatProps> = ({messages}) => {
           )}
         </div>
       ))}
+      <div />
     </div>
   );
-}
+};
 
 export default ListChat

@@ -11,19 +11,23 @@ const page = ({params}: {params: Promise<{conversationId: string}>}) => {
   const {conversationId} = use(params);
 
   const getConversationByIdMutation = useGetConversationById(conversationId);
-  const createChatMutation = useCreateChat()
+  const createChatMutation = useCreateChat();
+
   useEffect(() => {
     getConversationByIdMutation.mutate();
   }, []);
+
   const conversation = getConversationByIdMutation.data?.data.conversation;
   return (
     <div className="relative w-full lg:px-4 pt-4">
       <ListChat messages={conversation?.messages} />
       {conversation && (
-        <FormQuestion conversationId={conversation._id} createChatMutation={createChatMutation}/> 
-
+        <FormQuestion
+          conversationId={conversation._id}
+          createChatMutation={createChatMutation}
+          getConversationByIdMutation={getConversationByIdMutation}
+        />
       )}
-      
     </div>
   );
 }

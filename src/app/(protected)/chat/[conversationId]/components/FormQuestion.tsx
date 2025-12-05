@@ -1,33 +1,72 @@
 import { Button } from '@/src/components/ui/button';
-import { useSidebar } from '@/src/components/ui/sidebar';
-import { Textarea } from '@/src/components/ui/textarea';
-import { useCreateChat } from '@/src/hooks/use-chat';
-import { FC } from 'react'
+import { Field } from "@/src/components/ui/field";
+import { useSidebar } from "@/src/components/ui/sidebar";
+import { Textarea } from "@/src/components/ui/textarea";
+import { useCreateChat } from "@/src/hooks/use-chat";
+import { IoMdSend } from "react-icons/io";
+import { FC, useEffect, useState } from "react";
+import { getConversationById } from "@/src/services/conversationService";
+import { useGetConversationById } from "@/src/hooks/use-conversation";
+import { set } from "zod";
 
 interface FormQuestionProps {
-    conversationId: string
-    createChatMutation: ReturnType<typeof useCreateChat>
+  conversationId: string;
+  createChatMutation: ReturnType<typeof useCreateChat>;
+  getConversationByIdMutation: ReturnType<typeof useGetConversationById>;
 }
 
-const FormQuestion: FC<FormQuestionProps> = ({conversationId, createChatMutation}) => {
-  const {open} = useSidebar();
-    const handleChat = (e: any) => {
-        e.preventDefault()
-        createChatMutation.mutate({conversationId, input: "Test Integration API Chat GPT"})
-    }
+const FormQuestion: FC<FormQuestionProps> = ({
+  conversationId,
+  createChatMutation,
+  getConversationByIdMutation,
+}) => {
+  const { open } = useSidebar();
 
-    console.log(open)
+  const [question, setQuestion] = useState<string>("");
+
+  const handleChat = (e: any) => {
+    e.preventDefault();
+    createChatMutation.mutate(
+      {
+        conversationId,
+        input: question,
+      },
+      {
+        onSuccess: (res) => {
+          getConversationByIdMutation.mutate();
+        },
+      }
+    );
+  };
+
   return (
-    <div className={`fixed bottom-0 right-0 ${open ? "left-64" : "left-12" } transition-all duration-200 ease-linear pb-8 bg-white`}>
+    <div
+      className={`fixed bottom-0 right-0 ${
+        open ? "left-64" : "left-12"
+      } transition-all duration-200 ease-linear pb-8 bg-white`}
+    >
       <form id="form-question" onSubmit={handleChat}>
-      <Textarea
-        placeholder="Type your question here..."
-        className="rounded-4xl max-w-2xl mx-auto"
-      />
-      <Button size={'lg'} disabled={createChatMutation.status === 'pending'} type='submit'>{createChatMutation.status === 'pending' ? "Loading..." : "Chat"}</Button>
+        <div className="flex justify-between items-end max-w-2xl mx-auto space-x-4">
+          <Textarea
+            onChange={(e: any) => setQuestion(e.target.value)}
+            placeholder="Type your question here..."
+            className="rounded-4xl "
+          />
+          <Button
+            size={"icon-lg"}
+            disabled={createChatMutation.status === "pending"}
+            type="submit"
+          >
+            {createChatMutation.status === "pending" ? (
+              "Loading..."
+            ) : (
+              <IoMdSend />
+            )}
+          </Button>
+        </div>
       </form>
     </div>
   );
-}
+};
 
 export default FormQuestion
