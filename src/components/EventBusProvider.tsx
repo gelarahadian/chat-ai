@@ -8,7 +8,7 @@ const EventBusProvider = ({children}: {children: ReactNode}) => {
     const router = useRouter()
     useEffect(() => {
         eventBus.on("token-expired", () => {
-            router.push('auth/sign-in')
+            router.push("/auth/sign-in");
         })
     },[])
   return (

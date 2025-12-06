@@ -17,28 +17,42 @@ import { useGetConversations } from "../hooks/use-conversation";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { BiConversation } from "react-icons/bi";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { ChevronUp, User2 } from "lucide-react";
+import { useMe } from "../hooks/use-auth";
 
 export function AppSidebar() {
-  const {open} = useSidebar();
-    const router = useRouter();
+  const { open } = useSidebar();
+  const router = useRouter();
 
-    const getConversationsMutation = useGetConversations();
+  const meMutation = useMe();
+  const getConversationsMutation = useGetConversations();
 
-    useEffect(() => {
-        getConversationsMutation.mutate();
-    }, []);
+  useEffect(() => {
+    meMutation.mutate();
+    getConversationsMutation.mutate();
+  }, []);
 
-    const conversations = getConversationsMutation.data?.data.conversations;
+  const user = meMutation.data?.data.user;
+  const conversations = getConversationsMutation.data?.data.conversations;
+
+  const handleSingOut = () => {
+    localStorage.removeItem("token");
+    router.push("/auth/sign-in");
+  };
 
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
-
-          <div className="flex justify-between items-center">
-            {open && <span>Chat AI</span>}
-            <SidebarTrigger/>
-          </div>
-
+        <div className="flex justify-between items-center">
+          {open && <span>Chat AI</span>}
+          <SidebarTrigger />
+        </div>
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
@@ -72,7 +86,27 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
-          <SidebarMenuButton>Item 1</SidebarMenuButton>
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton>
+                  <User2 /> {user?.name ? user.name : "Username"}
+                  <ChevronUp className="ml-auto" />
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent side="top" className="w-[240px]">
+                <DropdownMenuItem>
+                  <span>Account</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <span>Billing</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleSingOut}>
+                  <span>Sign out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>

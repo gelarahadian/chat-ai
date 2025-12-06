@@ -11,7 +11,6 @@ export const useGetConversationById = (id: string) => {
     return useMutation({
       mutationFn: () => getConversationById(id),
       onSuccess: () => {
-        console.log(document.body.scrollHeight);
         setTimeout(() => {
           window.scrollTo({
             top: document.body.scrollHeight,
