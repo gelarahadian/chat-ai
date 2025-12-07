@@ -12,8 +12,8 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/src/components/ui/sidebar";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible";
-import { useGetConversations } from "../hooks/use-conversation";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../../../components/ui/collapsible";
+import { useGetConversations } from "../../../hooks/use-conversation";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { BiConversation } from "react-icons/bi";
@@ -22,9 +22,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import { ChevronUp, User2 } from "lucide-react";
-import { useMe } from "../hooks/use-auth";
+} from "../../../components/ui/dropdown-menu";
+import { ChevronUp, MessageSquareMore, User2 } from "lucide-react";
+import { useMe } from "../../../hooks/use-auth";
 
 export function AppSidebar() {
   const { open } = useSidebar();
@@ -54,13 +54,13 @@ export function AppSidebar() {
           <SidebarTrigger />
         </div>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className={`${!open && "p-2"}`}>
         <SidebarMenu>
           <Collapsible defaultOpen className="group/collapsible">
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
                 <SidebarMenuButton>
-                  <BiConversation />
+                  <MessageSquareMore />
                   <span>Your Conversations</span>
                 </SidebarMenuButton>
               </CollapsibleTrigger>

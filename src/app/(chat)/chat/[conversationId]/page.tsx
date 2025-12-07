@@ -19,7 +19,7 @@ const page = ({params}: {params: Promise<{conversationId: string}>}) => {
 
   const conversation = getConversationByIdMutation.data?.data.conversation;
   return (
-    <div className="relative w-full lg:px-4 pt-4">
+    <div className="relative w-full lg:px-4 pt-12 ">
       <ListChat messages={conversation?.messages} />
       {conversation && (
         <FormQuestion
