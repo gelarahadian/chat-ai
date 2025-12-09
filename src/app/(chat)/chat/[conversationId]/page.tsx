@@ -5,10 +5,10 @@ import { use, useEffect } from "react";
 import ListChat from "./components/ListChat";
 import FormQuestion from "./components/FormQuestion";
 import { useCreateChat } from "@/src/hooks/use-chat";
+import Header from "./components/header";
 
-
-const page = ({params}: {params: Promise<{conversationId: string}>}) => {
-  const {conversationId} = use(params);
+const page = ({ params }: { params: Promise<{ conversationId: string }> }) => {
+  const { conversationId } = use(params);
 
   const getConversationByIdMutation = useGetConversationById(conversationId);
   const createChatMutation = useCreateChat();
@@ -19,17 +19,20 @@ const page = ({params}: {params: Promise<{conversationId: string}>}) => {
 
   const conversation = getConversationByIdMutation.data?.data.conversation;
   return (
-    <div className="relative w-full lg:px-4 pt-12 ">
-      <ListChat messages={conversation?.messages} />
-      {conversation && (
-        <FormQuestion
-          conversationId={conversation._id}
-          createChatMutation={createChatMutation}
-          getConversationByIdMutation={getConversationByIdMutation}
-        />
-      )}
-    </div>
+    <>
+      <Header conversationId={conversationId} />
+      <div className="relative w-full lg:px-4 pt-12 ">
+        <ListChat messages={conversation?.messages} />
+        {conversation && (
+          <FormQuestion
+            conversationId={conversation._id}
+            createChatMutation={createChatMutation}
+            getConversationByIdMutation={getConversationByIdMutation}
+          />
+        )}
+      </div>
+    </>
   );
-}
+};
 
 export default page

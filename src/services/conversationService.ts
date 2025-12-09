@@ -7,3 +7,7 @@ export const getConversations = () => {
 export const getConversationById = (id: string) => {
     return api.get(`/conversation/${id}`)
 }
+
+export const deleteConversationById = (id: string) => {
+  return api.delete(`/conversation/${id}`);
+};

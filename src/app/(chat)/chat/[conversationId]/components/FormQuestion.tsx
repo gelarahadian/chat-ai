@@ -4,8 +4,7 @@ import { useSidebar } from "@/src/components/ui/sidebar";
 import { Textarea } from "@/src/components/ui/textarea";
 import { useCreateChat } from "@/src/hooks/use-chat";
 import { IoMdSend } from "react-icons/io";
-import { FC, useEffect, useState } from "react";
-import { getConversationById } from "@/src/services/conversationService";
+import { FC, useState } from "react";
 import { useGetConversationById } from "@/src/hooks/use-conversation";
 import { set } from "zod";
 

@@ -31,15 +31,14 @@ export function AppSidebar() {
   const router = useRouter();
 
   const meMutation = useMe();
-  const getConversationsMutation = useGetConversations();
+  const { data, isLoading } = useGetConversations();
 
   useEffect(() => {
     meMutation.mutate();
-    getConversationsMutation.mutate();
   }, []);
 
   const user = meMutation.data?.data.user;
-  const conversations = getConversationsMutation.data?.data.conversations;
+  const conversations = data?.data.conversations;
 
   const handleSingOut = () => {
     localStorage.removeItem("token");
@@ -66,18 +65,17 @@ export function AppSidebar() {
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <SidebarMenuSub>
-                  {getConversationsMutation.status === "success" &&
-                    conversations?.map((conversation: any) => (
-                      <SidebarMenuButton
-                        key={conversation._id}
-                        onClick={() => router.push(`/chat/${conversation._id}`)}
-                      >
-                        {" "}
-                        <span className="block w-full truncate">
-                          {conversation.title}
-                        </span>
-                      </SidebarMenuButton>
-                    ))}
+                  {conversations?.map((conversation: any) => (
+                    <SidebarMenuButton
+                      key={conversation._id}
+                      onClick={() => router.push(`/chat/${conversation._id}`)}
+                    >
+                      {" "}
+                      <span className="block w-full truncate">
+                        {conversation.title}
+                      </span>
+                    </SidebarMenuButton>
+                  ))}
                 </SidebarMenuSub>
               </CollapsibleContent>
             </SidebarMenuItem>

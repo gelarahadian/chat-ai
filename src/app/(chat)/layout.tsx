@@ -1,6 +1,5 @@
 import { AppSidebar } from "@/src/app/(chat)/components/app-sidebar";
 import { SidebarProvider } from "@/src/components/ui/sidebar";
-import Header from "./components/header";
 
 export default function ChatLayout({
   children,
@@ -10,7 +9,6 @@ export default function ChatLayout({
   return (
     <SidebarProvider className="flex">
       <AppSidebar />
-      <Header />
       {children}
     </SidebarProvider>
   );
