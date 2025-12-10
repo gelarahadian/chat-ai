@@ -4,6 +4,7 @@ import {
   getConversationById,
   getConversations,
 } from "../services/conversationService";
+import { useEffect } from "react";
 
 export const useGetConversations = () => {
   return useQuery({
@@ -13,18 +14,26 @@ export const useGetConversations = () => {
 };
 
 export const useGetConversationById = (id: string) => {
-  return useMutation({
-    mutationFn: () => getConversationById(id),
-    onSuccess: () => {
+  const query = useQuery({
+    queryKey: ["conversation", id],
+    queryFn: () => getConversationById(id),
+    enabled: !!id,
+  });
+
+  useEffect(() => {
+    if (query.data) {
       setTimeout(() => {
         window.scrollTo({
           top: document.body.scrollHeight,
           behavior: "auto",
         });
       }, 10);
-    },
-  });
+    }
+  }, [query.data]);
+
+  return query;
 };
+
 
 export const useDeleteConversationById = (id: string) => {
   const queryClient = useQueryClient();

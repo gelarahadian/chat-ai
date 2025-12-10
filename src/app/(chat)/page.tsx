@@ -1,3 +1,9 @@
+import NewChatForm from "./components/new-chat-form";
+
 export default function Home() {
-  return <div>Hello World!</div>;
+  return (
+    <div className="flex justify-center items-center w-full">
+      <NewChatForm />
+    </div>
+  );
 }

@@ -7,19 +7,19 @@ import { IoMdSend } from "react-icons/io";
 import { FC, useState } from "react";
 import { useGetConversationById } from "@/src/hooks/use-conversation";
 import { set } from "zod";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface FormQuestionProps {
   conversationId: string;
   createChatMutation: ReturnType<typeof useCreateChat>;
-  getConversationByIdMutation: ReturnType<typeof useGetConversationById>;
 }
 
 const FormQuestion: FC<FormQuestionProps> = ({
   conversationId,
   createChatMutation,
-  getConversationByIdMutation,
 }) => {
   const { open } = useSidebar();
+  const queryClient = useQueryClient();
 
   const [question, setQuestion] = useState<string>("");
 
@@ -32,7 +32,9 @@ const FormQuestion: FC<FormQuestionProps> = ({
       },
       {
         onSuccess: (res) => {
-          getConversationByIdMutation.mutate();
+          queryClient.invalidateQueries({
+            queryKey: ["conversation", conversationId],
+          });
         },
       }
     );

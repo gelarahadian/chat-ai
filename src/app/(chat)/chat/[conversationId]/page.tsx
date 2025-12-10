@@ -10,14 +10,10 @@ import Header from "./components/header";
 const page = ({ params }: { params: Promise<{ conversationId: string }> }) => {
   const { conversationId } = use(params);
 
-  const getConversationByIdMutation = useGetConversationById(conversationId);
+  const { data, isLoading } = useGetConversationById(conversationId);
   const createChatMutation = useCreateChat();
 
-  useEffect(() => {
-    getConversationByIdMutation.mutate();
-  }, []);
-
-  const conversation = getConversationByIdMutation.data?.data.conversation;
+  const conversation = data?.data.conversation;
   return (
     <>
       <Header conversationId={conversationId} />
@@ -27,7 +23,6 @@ const page = ({ params }: { params: Promise<{ conversationId: string }> }) => {
           <FormQuestion
             conversationId={conversation._id}
             createChatMutation={createChatMutation}
-            getConversationByIdMutation={getConversationByIdMutation}
           />
         )}
       </div>
