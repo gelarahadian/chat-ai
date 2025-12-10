@@ -31,6 +31,7 @@ import {
   User2,
 } from "lucide-react";
 import { useMe } from "../../../hooks/use-auth";
+import SearchDialog from "./search-dialog";
 
 export function AppSidebar() {
   const { open } = useSidebar();
@@ -73,12 +74,14 @@ export function AppSidebar() {
           </SidebarMenuButton>
         </SidebarMenu>
         <SidebarMenu>
-          <SidebarMenuButton asChild onClick={() => router.push("/")}>
-            <div className="cursor-pointer">
-              <Search />
-              <span>Search chats</span>
-            </div>
-          </SidebarMenuButton>
+          <SearchDialog>
+            <SidebarMenuButton asChild>
+              <div className="cursor-pointer">
+                <Search />
+                <span>Search chats</span>
+              </div>
+            </SidebarMenuButton>
+          </SearchDialog>
         </SidebarMenu>
         <SidebarMenu>
           <Collapsible defaultOpen className="group/collapsible">

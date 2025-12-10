@@ -3,6 +3,7 @@ import {
   deleteConversationById,
   getConversationById,
   getConversations,
+  searchConversation,
 } from "../services/conversationService";
 import { useEffect } from "react";
 
@@ -32,6 +33,12 @@ export const useGetConversationById = (id: string) => {
   }, [query.data]);
 
   return query;
+};
+
+export const useSearchConversation = (id: string) => {
+  return useMutation({
+    mutationFn: (q: string) => searchConversation(q),
+  });
 };
 
 

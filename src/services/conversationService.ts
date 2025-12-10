@@ -8,6 +8,10 @@ export const getConversationById = (id: string) => {
     return api.get(`/conversation/${id}`)
 }
 
+export const searchConversation = (q: string) => {
+  return api.post("/conversations/search", { q });
+};
+
 export const deleteConversationById = (id: string) => {
   return api.delete(`/conversation/${id}`);
 };
