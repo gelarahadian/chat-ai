@@ -23,7 +23,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../../../components/ui/dropdown-menu";
-import { ChevronUp, MessageSquareMore, User2 } from "lucide-react";
+import {
+  ChevronUp,
+  MessageSquareMore,
+  Search,
+  SquarePen,
+  User2,
+} from "lucide-react";
 import { useMe } from "../../../hooks/use-auth";
 
 export function AppSidebar() {
@@ -49,11 +55,31 @@ export function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarHeader>
         <div className="flex justify-between items-center">
-          {open && <span>Chat AI</span>}
+          {open && (
+            <SidebarMenuButton onClick={() => router.push("/")}>
+              Chat AI
+            </SidebarMenuButton>
+          )}
           <SidebarTrigger />
         </div>
       </SidebarHeader>
       <SidebarContent className={`${!open && "p-2"}`}>
+        <SidebarMenu>
+          <SidebarMenuButton asChild onClick={() => router.push("/")}>
+            <div className="cursor-pointer">
+              <SquarePen />
+              <span>New Chat</span>
+            </div>
+          </SidebarMenuButton>
+        </SidebarMenu>
+        <SidebarMenu>
+          <SidebarMenuButton asChild onClick={() => router.push("/")}>
+            <div className="cursor-pointer">
+              <Search />
+              <span>Search chats</span>
+            </div>
+          </SidebarMenuButton>
+        </SidebarMenu>
         <SidebarMenu>
           <Collapsible defaultOpen className="group/collapsible">
             <SidebarMenuItem>
@@ -68,6 +94,7 @@ export function AppSidebar() {
                   {conversations?.map((conversation: any) => (
                     <SidebarMenuButton
                       key={conversation._id}
+                      className="cursor-pointer"
                       onClick={() => router.push(`/chat/${conversation._id}`)}
                     >
                       {" "}
@@ -93,12 +120,6 @@ export function AppSidebar() {
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent side="top" className="w-[240px]">
-                <DropdownMenuItem>
-                  <span>Account</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span>Billing</span>
-                </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleSingOut}>
                   <span>Sign out</span>
                 </DropdownMenuItem>

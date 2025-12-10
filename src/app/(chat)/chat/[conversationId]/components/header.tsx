@@ -41,7 +41,6 @@ const Header: FC<HeaderProps> = ({conversationId}) => {
             <Ellipsis />
           </MenubarTrigger>
           <MenubarContent>
-            <MenubarItem>Share</MenubarItem>
             <MenubarItem onClick={handleDeleteConv} className="text-red-500">
               Delete
             </MenubarItem>
