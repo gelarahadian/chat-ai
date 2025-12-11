@@ -35,7 +35,7 @@ export const useGetConversationById = (id: string) => {
   return query;
 };
 
-export const useSearchConversation = (id: string) => {
+export const useSearchConversation = () => {
   return useMutation({
     mutationFn: (q: string) => searchConversation(q),
   });
