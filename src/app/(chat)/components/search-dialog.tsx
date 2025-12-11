@@ -21,13 +21,39 @@ const SearchDialog = ({ children }: { children: ReactNode }) => {
   const [search, setSearch] = useState<string>("");
   const [results, setResults] = useState<any[]>([]);
 
-  const { mutate: searchConversation, status, data } = useSearchConversation();
+  const { mutate: searchConversation, status } = useSearchConversation();
 
-  const handleSearch = (e: any) => {
-    searchConversation(e.target.value, {
+  const handleSearch = (search: string) => {
+    searchConversation(search, {
       onSuccess: (res) => {
         setResults(res.data.results);
       },
+    });
+  };
+
+  useEffect(() => {
+    handleSearch(search);
+  }, [search]);
+
+  const escapeRegex = (value: string) =>
+    value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+  const matchSearchContent = (content?: string, query?: string): ReactNode => {
+    const trimmedQuery = query?.trim();
+    if (!content) return "Tidak ada konten";
+    if (!trimmedQuery) return content;
+
+    const regex = new RegExp(`(${escapeRegex(trimmedQuery)})`, "gi");
+    return content.split(regex).map((part, idx) => {
+      console.log(part, idx);
+      const isMatch = part.toLowerCase() === trimmedQuery.toLowerCase();
+      return isMatch ? (
+        <mark key={idx} className="bg-transparent font-semibold">
+          {part}
+        </mark>
+      ) : (
+        <span key={idx}>{part}</span>
+      );
     });
   };
   return (
@@ -39,7 +65,7 @@ const SearchDialog = ({ children }: { children: ReactNode }) => {
           <Input
             className="border-none focus-visible:ring-0 shadow-none"
             placeholder="Search chats..."
-            onChange={handleSearch}
+            onChange={(e) => setSearch(e.target.value)}
           />
         </DialogHeader>
         <div className="flex-1 overflow-y-scroll">
@@ -49,7 +75,10 @@ const SearchDialog = ({ children }: { children: ReactNode }) => {
                 <ItemContent>
                   <ItemTitle>{result.title}</ItemTitle>
                   <ItemDescription>
-                    {result.assistantMessage.content}
+                    {matchSearchContent(
+                      result.assistantMessage.content,
+                      search
+                    )}
                   </ItemDescription>
                 </ItemContent>
                 {/* <ItemActions>
