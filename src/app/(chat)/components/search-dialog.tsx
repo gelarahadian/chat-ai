@@ -35,6 +35,7 @@ const SearchDialog = ({ children }: { children: ReactNode }) => {
     handleSearch(search);
   }, [search]);
 
+
   const escapeRegex = (value: string) =>
     value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
@@ -109,44 +110,58 @@ const SearchDialog = ({ children }: { children: ReactNode }) => {
     );
   };
 
-  return (
-    <Dialog>
-      <DialogTrigger>{children}</DialogTrigger>
-      <DialogContent className="p-0 max-h-96 h-full flex flex-col">
-        <DialogHeader className="border-b p-3 shrink-0">
-          <DialogTitle className="hidden">Search chats</DialogTitle>
-          <Input
-            className="border-none focus-visible:ring-0 shadow-none"
-            placeholder="Search chats..."
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </DialogHeader>
-        <div className="flex-1 overflow-y-scroll">
-          {results.map((result) => (
-            <Item key={result._id} size={"sm"} asChild>
-              <a href="#">
-                <ItemContent>
-                  <ItemTitle className="font-normal gap-0 inline-block">
-                    {highlightText(result.title, search)}
-                  </ItemTitle>
-                  <ItemDescription className="line-clamp-1">
-                    {highlightText(result.assistantMessage?.content, search, {
-                      useEllipsis: true,
-                      beforeContextLength: 10,
-                      afterContextLength: 90,
-                    })}
-                  </ItemDescription>
-                </ItemContent>
-                {/* <ItemActions>
-                <ChevronRightIcon className="size-4" />
-              </ItemActions> */}
-              </a>
-            </Item>
-          ))}
-        </div>
-      </DialogContent>
-    </Dialog>
-  );
+const formatDateEnUTC = (dateString: string) => {
+  const date = new Date(dateString);
+
+  const day = date.getUTCDate();
+  const month = date.toLocaleString("en-US", {
+    month: "short",
+    timeZone: "UTC",
+  });
+
+  return `${day} ${month}`;
+};
+
+return (
+  <Dialog>
+    <DialogTrigger>{children}</DialogTrigger>
+    <DialogContent className="p-0 max-h-96 h-full sm:max-w-2xl w-full flex flex-col">
+      <DialogHeader className="border-b p-3 shrink-0">
+        <DialogTitle className="hidden">Search chats</DialogTitle>
+        <Input
+          className="border-none focus-visible:ring-0 shadow-none"
+          placeholder="Search chats..."
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </DialogHeader>
+      <div className="flex-1 overflow-y-scroll">
+        {results.map((result) => (
+          <Item key={result._id} className="group" size={"sm"} asChild>
+            <a href="#">
+              <ItemContent>
+                <ItemTitle className="font-normal gap-0 inline-block">
+                  {highlightText(result.title, search)}
+                </ItemTitle>
+                <ItemDescription className="line-clamp-1">
+                  {highlightText(result.assistantMessage?.content, search, {
+                    useEllipsis: true,
+                    beforeContextLength: 10,
+                    afterContextLength: 90,
+                  })}
+                </ItemDescription>
+              </ItemContent>
+              <ItemActions className=" hidden group-hover:inline-block">
+                <ItemDescription>
+                  {formatDateEnUTC(result.created_at)}
+                </ItemDescription>
+              </ItemActions>
+            </a>
+          </Item>
+        ))}
+      </div>
+    </DialogContent>
+  </Dialog>
+);
 };
 
 export default SearchDialog;
