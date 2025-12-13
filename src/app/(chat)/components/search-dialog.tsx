@@ -38,24 +38,77 @@ const SearchDialog = ({ children }: { children: ReactNode }) => {
   const escapeRegex = (value: string) =>
     value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-  const matchSearchContent = (content?: string, query?: string): ReactNode => {
+  type HighlightOptions = {
+    useEllipsis?: boolean;
+    beforeContextLength?: number;
+    afterContextLength?: number;
+  };
+
+  const highlightText = (
+    content?: string,
+    query?: string,
+    options: HighlightOptions = {}
+  ): React.ReactNode => {
+    const {
+      useEllipsis = false,
+      beforeContextLength = 20,
+      afterContextLength = 20,
+    } = options;
+
     const trimmedQuery = query?.trim();
     if (!content) return "Tidak ada konten";
     if (!trimmedQuery) return content;
 
-    const regex = new RegExp(`(${escapeRegex(trimmedQuery)})`, "gi");
-    return content.split(regex).map((part, idx) => {
-      console.log(part, idx);
-      const isMatch = part.toLowerCase() === trimmedQuery.toLowerCase();
-      return isMatch ? (
-        <mark key={idx} className="bg-transparent font-semibold">
-          {part}
-        </mark>
-      ) : (
-        <span key={idx}>{part}</span>
-      );
-    });
+    const safeQuery = escapeRegex(trimmedQuery);
+    const regex = new RegExp(`(${safeQuery})`, "i");
+
+    // 🔹 MODE TITLE (tanpa ellipsis)
+    if (!useEllipsis) {
+      return content.split(regex).map((part, idx) => {
+        const isMatch = part.toLowerCase() === trimmedQuery.toLowerCase();
+
+        return isMatch ? (
+          <span key={idx} className="bg-transparent font-semibold">
+            {part}
+          </span>
+        ) : (
+          <span key={idx}>{part}</span>
+        );
+      });
+    }
+
+    // 🔹 MODE DESCRIPTION (pakai ellipsis)
+    const match = content.match(regex);
+    if (!match) return content;
+
+    const index = match.index!;
+    const matchText = match[0];
+
+    const before = content.slice(
+      Math.max(0, index - beforeContextLength),
+      index
+    );
+
+    const after = content.slice(
+      index + matchText.length,
+      index + matchText.length + afterContextLength
+    );
+
+    const showBeforeDots = index > beforeContextLength;
+    const showAfterDots =
+      index + matchText.length + afterContextLength < content.length;
+
+    return (
+      <>
+        {showBeforeDots && "..."}
+        {before}
+        <span className="text-gray-700 font-semibold">{matchText}</span>
+        {after}
+        {showAfterDots && "..."}
+      </>
+    );
   };
+
   return (
     <Dialog>
       <DialogTrigger>{children}</DialogTrigger>
@@ -73,12 +126,15 @@ const SearchDialog = ({ children }: { children: ReactNode }) => {
             <Item key={result._id} size={"sm"} asChild>
               <a href="#">
                 <ItemContent>
-                  <ItemTitle>{result.title}</ItemTitle>
-                  <ItemDescription>
-                    {matchSearchContent(
-                      result.assistantMessage.content,
-                      search
-                    )}
+                  <ItemTitle className="font-normal gap-0 inline-block">
+                    {highlightText(result.title, search)}
+                  </ItemTitle>
+                  <ItemDescription className="line-clamp-1">
+                    {highlightText(result.assistantMessage?.content, search, {
+                      useEllipsis: true,
+                      beforeContextLength: 10,
+                      afterContextLength: 90,
+                    })}
                   </ItemDescription>
                 </ItemContent>
                 {/* <ItemActions>
