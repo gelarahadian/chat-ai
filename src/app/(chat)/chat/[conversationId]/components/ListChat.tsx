@@ -19,9 +19,9 @@ const ListChat: FC<ListChatProps> = ({ messages }) => {
         <div key={message._id}>
           {message.role === "user" ? (
             <div className="flex justify-end w-full ">
-              <Badge variant={"secondary"} className="text-base">
-                {message.content}
-              </Badge>
+              <div className="max-w-xl bg-gray-200 px-3 py-1.5 rounded-md">
+                <ReactMarkdown>{message.content}</ReactMarkdown>
+              </div>
             </div>
           ) : (
             <div className="prose prose-neutral max-w-none">
