@@ -1,5 +1,7 @@
 import { Badge } from '@/src/components/ui/badge';
 import { FC, useEffect, useRef } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface ListChatProps {
   messages: any;
@@ -12,7 +14,7 @@ const ListChat: FC<ListChatProps> = ({ messages }) => {
     bottomRef.current?.scrollIntoView({ behavior: "auto" });
   }, []);
   return (
-    <div ref={bottomRef} className="max-w-5xl mx-auto space-y-5 pb-28">
+    <div ref={bottomRef} className="max-w-4xl mx-auto space-y-5 pb-28">
       {messages?.map((message: any) => (
         <div key={message._id}>
           {message.role === "user" ? (
@@ -22,7 +24,11 @@ const ListChat: FC<ListChatProps> = ({ messages }) => {
               </Badge>
             </div>
           ) : (
-            <div>{message.content}</div>
+            <div className="prose prose-neutral max-w-none">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {message.content}
+              </ReactMarkdown>
+            </div>
           )}
         </div>
       ))}
