@@ -5,9 +5,8 @@ import { Textarea } from "@/src/components/ui/textarea";
 import { useCreateChat } from "@/src/hooks/use-chat";
 import { IoMdSend } from "react-icons/io";
 import { FC, useState } from "react";
-import { useGetConversationById } from "@/src/hooks/use-conversation";
-import { set } from "zod";
 import { useQueryClient } from "@tanstack/react-query";
+import { Loader } from "lucide-react";
 
 interface FormQuestionProps {
   conversationId: string;
@@ -32,6 +31,7 @@ const FormQuestion: FC<FormQuestionProps> = ({
       },
       {
         onSuccess: (res) => {
+          setQuestion("");
           queryClient.invalidateQueries({
             queryKey: ["conversation", conversationId],
           });
@@ -50,6 +50,7 @@ const FormQuestion: FC<FormQuestionProps> = ({
         <form id="form-question" onSubmit={handleChat}>
           <div className="flex justify-between items-end mx-auto space-x-4 px-3">
             <Textarea
+              value={question}
               onChange={(e: any) => setQuestion(e.target.value)}
               placeholder="Type your question here..."
               className="border-none max-h-96 focus-visible:ring-0 "
@@ -58,10 +59,12 @@ const FormQuestion: FC<FormQuestionProps> = ({
               size={"icon-lg"}
               disabled={createChatMutation.status === "pending"}
               type="submit"
-              className="mb-3 rounded-full"
+              className={`mb-3 rounded-full ${
+                createChatMutation.status === "pending" ? "animate-pulse" : ""
+              }`}
             >
               {createChatMutation.status === "pending" ? (
-                "Loading..."
+                <Loader className="animate-spin" />
               ) : (
                 <IoMdSend />
               )}
