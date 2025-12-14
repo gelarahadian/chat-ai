@@ -57,7 +57,9 @@ const FormQuestion: FC<FormQuestionProps> = ({
             />
             <Button
               size={"icon-lg"}
-              disabled={createChatMutation.status === "pending"}
+              disabled={
+                createChatMutation.status === "pending" || question === ""
+              }
               type="submit"
               className={`mb-3 rounded-full ${
                 createChatMutation.status === "pending" ? "animate-pulse" : ""

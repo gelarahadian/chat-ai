@@ -32,6 +32,7 @@ import {
 } from "lucide-react";
 import { useMe } from "../../../hooks/use-auth";
 import SearchDialog from "./search-dialog";
+import { Skeleton } from "@/src/components/ui/skeleton";
 
 export function AppSidebar() {
   const { open } = useSidebar();
@@ -98,18 +99,38 @@ export function AppSidebar() {
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <SidebarMenuSub>
-                  {conversations?.map((conversation: any) => (
-                    <SidebarMenuButton
-                      key={conversation._id}
-                      className="cursor-pointer"
-                      onClick={() => router.push(`/chat/${conversation._id}`)}
-                    >
-                      {" "}
-                      <span className="block w-full truncate">
-                        {conversation.title}
-                      </span>
-                    </SidebarMenuButton>
-                  ))}
+                  {isLoading ? (
+                    <>
+                      <SidebarMenuButton>
+                        <Skeleton className="h-3 w-full bg-gray-200" />
+                      </SidebarMenuButton>
+                      <SidebarMenuButton>
+                        <Skeleton className="h-3 w-full bg-gray-200" />
+                      </SidebarMenuButton>
+                      <SidebarMenuButton>
+                        <Skeleton className="h-3 w-full bg-gray-200" />
+                      </SidebarMenuButton>
+                      <SidebarMenuButton>
+                        <Skeleton className="h-3 w-full bg-gray-200" />
+                      </SidebarMenuButton>
+                      <SidebarMenuButton>
+                        <Skeleton className="h-3 w-full bg-gray-200" />
+                      </SidebarMenuButton>
+                    </>
+                  ) : (
+                    conversations?.map((conversation: any) => (
+                      <SidebarMenuButton
+                        key={conversation._id}
+                        className="cursor-pointer"
+                        onClick={() => router.push(`/chat/${conversation._id}`)}
+                      >
+                        {" "}
+                        <span className="block w-full truncate">
+                          {conversation.title}
+                        </span>
+                      </SidebarMenuButton>
+                    ))
+                  )}
                 </SidebarMenuSub>
               </CollapsibleContent>
             </SidebarMenuItem>
