@@ -55,7 +55,11 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
-        <div className="flex justify-between items-center">
+        <div
+          className={`flex items-center ${
+            open ? "justify-between" : "justify-center"
+          }`}
+        >
           {open && (
             <SidebarMenuButton onClick={() => router.push("/")}>
               Chat AI
@@ -64,7 +68,7 @@ export function AppSidebar() {
           <SidebarTrigger />
         </div>
       </SidebarHeader>
-      <SidebarContent className={`${!open && "p-2"}`}>
+      <SidebarContent className={`p-2`}>
         <SidebarMenu>
           <SidebarMenuButton asChild onClick={() => router.push("/")}>
             <div className="cursor-pointer">

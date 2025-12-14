@@ -46,26 +46,29 @@ const FormQuestion: FC<FormQuestionProps> = ({
         open ? "left-64" : "left-12"
       } transition-all duration-200 ease-linear pb-8 bg-white`}
     >
-      <form id="form-question" onSubmit={handleChat}>
-        <div className="flex justify-between items-end max-w-2xl mx-auto space-x-4">
-          <Textarea
-            onChange={(e: any) => setQuestion(e.target.value)}
-            placeholder="Type your question here..."
-            className="rounded-4xl "
-          />
-          <Button
-            size={"icon-lg"}
-            disabled={createChatMutation.status === "pending"}
-            type="submit"
-          >
-            {createChatMutation.status === "pending" ? (
-              "Loading..."
-            ) : (
-              <IoMdSend />
-            )}
-          </Button>
-        </div>
-      </form>
+      <div className="max-w-3xl w-full bg-gray-100 rounded-4xl mx-auto">
+        <form id="form-question" onSubmit={handleChat}>
+          <div className="flex justify-between items-end mx-auto space-x-4 px-3">
+            <Textarea
+              onChange={(e: any) => setQuestion(e.target.value)}
+              placeholder="Type your question here..."
+              className="border-none max-h-96 focus-visible:ring-0 "
+            />
+            <Button
+              size={"icon-lg"}
+              disabled={createChatMutation.status === "pending"}
+              type="submit"
+              className="mb-3 rounded-full"
+            >
+              {createChatMutation.status === "pending" ? (
+                "Loading..."
+              ) : (
+                <IoMdSend />
+              )}
+            </Button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
