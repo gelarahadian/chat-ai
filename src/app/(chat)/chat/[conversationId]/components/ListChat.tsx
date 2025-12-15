@@ -1,7 +1,8 @@
 import { Badge } from '@/src/components/ui/badge';
-import { FC, useEffect, useRef } from "react";
+import React, { FC, useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { CodeBlock } from "./CodeBlock";
 
 interface ListChatProps {
   messages: any;
@@ -13,6 +14,19 @@ const ListChat: FC<ListChatProps> = ({ messages }) => {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "auto" });
   }, []);
+
+  function extractText(node: React.ReactNode): string {
+    if (typeof node === "string") return node;
+    if (Array.isArray(node)) return node.map(extractText).join("");
+    if (React.isValidElement(node)) {
+      const element = node as React.ReactElement<{
+        children?: React.ReactNode;
+      }>;
+      return extractText(element.props.children);
+    }
+    return "";
+  }
+
   return (
     <div ref={bottomRef} className="max-w-4xl mx-auto space-y-5 pb-28">
       {messages?.map((message: any) => (
@@ -25,7 +39,21 @@ const ListChat: FC<ListChatProps> = ({ messages }) => {
             </div>
           ) : (
             <div className="prose prose-neutral max-w-none">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                components={{
+                  code({ className, children }) {
+                    const lang = className?.replace("language-", "") ?? "text";
+
+                    return (
+                      <CodeBlock language={lang} code={extractText(children)} />
+                    );
+                  },
+                  pre({ children }) {
+                    return <>{children}</>;
+                  },
+                }}
+              >
                 {message.content}
               </ReactMarkdown>
             </div>
