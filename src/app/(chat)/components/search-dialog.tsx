@@ -1,5 +1,6 @@
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -14,12 +15,15 @@ import {
   ItemTitle,
 } from "@/src/components/ui/item";
 import { useSearchConversation } from "@/src/hooks/use-conversation";
+import { useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
 
 const SearchDialog = ({ children }: { children: ReactNode }) => {
   const [search, setSearch] = useState<string>("");
   const [results, setResults] = useState<any[]>([]);
+  const [open, setOpen] = useState<boolean>(false);
 
+  const router = useRouter();
   const { mutate: searchConversation, status } = useSearchConversation();
 
   const handleSearch = (search: string) => {
@@ -108,6 +112,11 @@ const SearchDialog = ({ children }: { children: ReactNode }) => {
     );
   };
 
+  const handleChooseConversation = (conversationId: string) => {
+    setOpen(false);
+    router.push(`/chat/${conversationId}`);
+  };
+
   const formatDateEnUTC = (dateString: string) => {
     const date = new Date(dateString);
 
@@ -121,7 +130,7 @@ const SearchDialog = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>{children}</DialogTrigger>
       <DialogContent className="p-0 max-h-96 h-full sm:max-w-2xl w-full flex flex-col">
         <DialogHeader className="border-b p-3 shrink-0">
@@ -134,27 +143,35 @@ const SearchDialog = ({ children }: { children: ReactNode }) => {
         </DialogHeader>
         <div className="flex-1 overflow-y-scroll">
           {results.map((result) => (
-            <Item key={result._id} className="group" size={"sm"} asChild>
-              <a href={`/chat/${result._id}`}>
-                <ItemContent>
-                  <ItemTitle className="font-normal gap-0 inline-block">
-                    {highlightText(result.title, search)}
-                  </ItemTitle>
-                  <ItemDescription className="line-clamp-1">
-                    {highlightText(result.assistantMessage?.content, search, {
-                      useEllipsis: true,
-                      beforeContextLength: 10,
-                      afterContextLength: 90,
-                    })}
-                  </ItemDescription>
-                </ItemContent>
-                <ItemActions className=" hidden group-hover:inline-block">
-                  <ItemDescription>
-                    {formatDateEnUTC(result.created_at)}
-                  </ItemDescription>
-                </ItemActions>
-              </a>
-            </Item>
+            <DialogClose>
+              <Item
+                key={result._id}
+                onClick={() => handleChooseConversation(result._id)}
+                className="group"
+                size={"sm"}
+                asChild
+              >
+                <a>
+                  <ItemContent>
+                    <ItemTitle className="font-normal gap-0 inline-block">
+                      {highlightText(result.title, search)}
+                    </ItemTitle>
+                    <ItemDescription className="line-clamp-1">
+                      {highlightText(result.assistantMessage?.content, search, {
+                        useEllipsis: true,
+                        beforeContextLength: 10,
+                        afterContextLength: 90,
+                      })}
+                    </ItemDescription>
+                  </ItemContent>
+                  <ItemActions className=" hidden group-hover:inline-block">
+                    <ItemDescription>
+                      {formatDateEnUTC(result.created_at)}
+                    </ItemDescription>
+                  </ItemActions>
+                </a>
+              </Item>
+            </DialogClose>
           ))}
         </div>
       </DialogContent>
