@@ -1,7 +1,7 @@
 'use client'
 
 import { ReactNode, useEffect } from 'react'
-import { eventBus } from '../lib/eventBus'
+import { eventBus } from '../../lib/eventBus'
 import { useRouter } from 'next/navigation'
 
 const EventBusProvider = ({children}: {children: ReactNode}) => {
