@@ -16,7 +16,6 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../../../co
 import { useGetConversations } from "../../../hooks/use-conversation";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { BiConversation } from "react-icons/bi";
 import {
   DropdownMenu,
   DropdownMenuContent,

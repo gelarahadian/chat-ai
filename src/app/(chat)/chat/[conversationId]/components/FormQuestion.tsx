@@ -3,10 +3,9 @@ import { Field } from "@/src/components/ui/field";
 import { useSidebar } from "@/src/components/ui/sidebar";
 import { Textarea } from "@/src/components/ui/textarea";
 import { useCreateChat } from "@/src/hooks/use-chat";
-import { IoMdSend } from "react-icons/io";
 import { FC, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Loader } from "lucide-react";
+import { ArrowDown, ArrowUp, Loader, Send } from "lucide-react";
 
 interface FormQuestionProps {
   conversationId: string;
@@ -66,9 +65,9 @@ const FormQuestion: FC<FormQuestionProps> = ({
               }`}
             >
               {createChatMutation.status === "pending" ? (
-                <Loader className="animate-spin" />
+                <ArrowDown />
               ) : (
-                <IoMdSend />
+                <ArrowUp />
               )}
             </Button>
           </div>

@@ -143,35 +143,33 @@ const SearchDialog = ({ children }: { children: ReactNode }) => {
         </DialogHeader>
         <div className="flex-1 overflow-y-scroll">
           {results.map((result) => (
-            <DialogClose>
-              <Item
-                key={result._id}
-                onClick={() => handleChooseConversation(result._id)}
-                className="group"
-                size={"sm"}
-                asChild
-              >
-                <a>
-                  <ItemContent>
-                    <ItemTitle className="font-normal gap-0 inline-block">
-                      {highlightText(result.title, search)}
-                    </ItemTitle>
-                    <ItemDescription className="line-clamp-1">
-                      {highlightText(result.assistantMessage?.content, search, {
-                        useEllipsis: true,
-                        beforeContextLength: 10,
-                        afterContextLength: 90,
-                      })}
-                    </ItemDescription>
-                  </ItemContent>
-                  <ItemActions className=" hidden group-hover:inline-block">
-                    <ItemDescription>
-                      {formatDateEnUTC(result.created_at)}
-                    </ItemDescription>
-                  </ItemActions>
-                </a>
-              </Item>
-            </DialogClose>
+            <Item
+              key={result._id}
+              onClick={() => handleChooseConversation(result._id)}
+              className="group"
+              size={"sm"}
+              asChild
+            >
+              <a>
+                <ItemContent>
+                  <ItemTitle className="font-normal gap-0 inline-block">
+                    {highlightText(result.title, search)}
+                  </ItemTitle>
+                  <ItemDescription className="line-clamp-1">
+                    {highlightText(result.assistantMessage?.content, search, {
+                      useEllipsis: true,
+                      beforeContextLength: 10,
+                      afterContextLength: 90,
+                    })}
+                  </ItemDescription>
+                </ItemContent>
+                <ItemActions className=" hidden group-hover:inline-block">
+                  <ItemDescription>
+                    {formatDateEnUTC(result.created_at)}
+                  </ItemDescription>
+                </ItemActions>
+              </a>
+            </Item>
           ))}
         </div>
       </DialogContent>

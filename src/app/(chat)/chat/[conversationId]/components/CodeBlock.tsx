@@ -52,7 +52,7 @@ export function CodeBlock({
       {/* Copy button */}
       <button
         onClick={handleCopy}
-        className="absolute flex items-center text-xs right-3 top-7 z-10 opacity-0 group-hover:opacity-100
+        className="absolute cursor-pointer flex items-center text-xs right-3 top-7 z-10 opacity-0 group-hover:opacity-100
                    transition bg-transparent text-muted space-x-2"
       >
         {copied ? (

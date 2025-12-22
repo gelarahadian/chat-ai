@@ -27,6 +27,8 @@ const ListChat: FC<ListChatProps> = ({ messages }) => {
     return "";
   }
 
+  // console.log(messages[1]?.content);
+
   return (
     <div ref={bottomRef} className="max-w-4xl mx-auto space-y-5 pb-28">
       {messages?.map((message: any) => (
@@ -34,7 +36,7 @@ const ListChat: FC<ListChatProps> = ({ messages }) => {
           {message.role === "user" ? (
             <div className="flex justify-end w-full ">
               <div className="max-w-xl bg-gray-200 px-3 py-1.5 rounded-md">
-                <ReactMarkdown>{message.content}</ReactMarkdown>
+                <div className="whitespace-pre-wrap">{message.content}</div>
               </div>
             </div>
           ) : (
@@ -42,6 +44,19 @@ const ListChat: FC<ListChatProps> = ({ messages }) => {
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={{
+                  p({ children }) {
+                    if (
+                      Array.isArray(children) &&
+                      children.some(
+                        (child: any) =>
+                          child?.type === "pre" || child?.type === "div"
+                      )
+                    ) {
+                      return <>{children}</>;
+                    }
+                    return <p>{children}</p>;
+                  },
+
                   code({ className, children }) {
                     const lang = className?.replace("language-", "") ?? "text";
 
