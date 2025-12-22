@@ -61,11 +61,14 @@ export function AppSidebar() {
           }`}
         >
           {open && (
-            <SidebarMenuButton onClick={() => router.push("/")}>
+            <SidebarMenuButton
+              className="cursor-pointer"
+              onClick={() => router.push("/")}
+            >
               Chat AI
             </SidebarMenuButton>
           )}
-          <SidebarTrigger />
+          <SidebarTrigger className="cursor-pointer" />
         </div>
       </SidebarHeader>
       <SidebarContent className={`p-2`}>
@@ -141,13 +144,17 @@ export function AppSidebar() {
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <SidebarMenuButton>
+                <SidebarMenuButton className="cursor-pointer">
                   <User2 /> {user?.name ? user.name : "Username"}
                   <ChevronUp className="ml-auto" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent side="top" className="w-[240px]">
-                <DropdownMenuItem onClick={handleSingOut}>
+                <DropdownMenuItem
+                  variant="destructive"
+                  className="cursor-pointer"
+                  onClick={handleSingOut}
+                >
                   <span>Sign out</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>

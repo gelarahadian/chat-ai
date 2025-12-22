@@ -37,11 +37,15 @@ const Header: FC<HeaderProps> = ({conversationId}) => {
     >
       <Menubar className="border-none justify-end">
         <MenubarMenu>
-          <MenubarTrigger>
+          <MenubarTrigger className="cursor-pointer">
             <Ellipsis />
           </MenubarTrigger>
           <MenubarContent>
-            <MenubarItem onClick={handleDeleteConv} className="text-red-500">
+            <MenubarItem
+              onClick={handleDeleteConv}
+              variant="destructive"
+              className="cursor-pointer"
+            >
               Delete
             </MenubarItem>
           </MenubarContent>
