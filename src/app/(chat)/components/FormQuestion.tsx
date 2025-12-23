@@ -1,5 +1,4 @@
-import { Button } from '@/src/components/ui/button';
-import { Field } from "@/src/components/ui/field";
+import { Button } from "@/src/components/ui/button";
 import { useSidebar } from "@/src/components/ui/sidebar";
 import { Textarea } from "@/src/components/ui/textarea";
 import { useCreateChat } from "@/src/hooks/use-chat";
@@ -77,4 +76,4 @@ const FormQuestion: FC<FormQuestionProps> = ({
   );
 };
 
-export default FormQuestion
+export default FormQuestion;
