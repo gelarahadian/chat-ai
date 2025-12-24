@@ -49,7 +49,6 @@ export function CodeBlock({
 
   return (
     <div className="relative group">
-      {/* Copy button */}
       <button
         onClick={handleCopy}
         className="absolute cursor-pointer flex items-center text-xs right-3 top-7 z-10 opacity-0 group-hover:opacity-100

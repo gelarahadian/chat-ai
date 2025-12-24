@@ -7,30 +7,36 @@ import {
   MenubarMenu,
   MenubarTrigger,
 } from "@/src/components/ui/menubar";
-import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@/src/components/ui/navigation-menu";
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+} from "@/src/components/ui/navigation-menu";
 
 import { useSidebar } from "@/src/components/ui/sidebar";
 import { useDeleteConversationById } from "@/src/hooks/use-conversation";
 import { Ellipsis, Share } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { FC } from "react";
+import ShareDialog from "./share-dialog";
 
 type HeaderProps = {
-  conversationId?: string
-}
+  conversationId?: string;
+};
 
-const Header: FC<HeaderProps> = ({conversationId}) => {
+const Header: FC<HeaderProps> = ({ conversationId }) => {
   const { open } = useSidebar();
 
   const router = useRouter();
 
-  let mutationDeleteConversationById: ReturnType <typeof useDeleteConversationById>
+  let mutationDeleteConversationById: ReturnType<
+    typeof useDeleteConversationById
+  >;
 
-  if(conversationId){
+  if (conversationId) {
     mutationDeleteConversationById = useDeleteConversationById(conversationId);
   }
-
-  
 
   const handleDeleteConv = () => {
     mutationDeleteConversationById.mutate();
@@ -40,32 +46,41 @@ const Header: FC<HeaderProps> = ({conversationId}) => {
     <div
       className={` ${
         open ? "left-64" : "left-12"
-      } flex transition-all duration-200 ease-linear bg-white z-10 border-b fixed top-0 right-0 `}
+      } flex justify-between items-center transition-all duration-200 ease-linear bg-white z-10 border-b fixed top-0 right-0 `}
     >
-      <NavigationMenu>
-        <NavigationMenuList>
-          <NavigationMenuItem>
-            <NavigationMenuLink className="flex flex-row items-center"><Share/> Share</NavigationMenuLink>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-      </NavigationMenu>
+      <h2 className="ml-3 my-1">Chat AI</h2>
+      {conversationId && (
+        <div className="flex">
+          <NavigationMenu>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <ShareDialog conversationId={conversationId}>
+                  <NavigationMenuLink className="flex flex-row items-center cursor-pointer">
+                    <Share /> Share
+                  </NavigationMenuLink>
+                </ShareDialog>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
 
-      <Menubar className="border-none justify-end">
-        <MenubarMenu>
-          <MenubarTrigger className="cursor-pointer">
-            <Ellipsis />
-          </MenubarTrigger>
-          <MenubarContent>
-            <MenubarItem
-              onClick={handleDeleteConv}
-              variant="destructive"
-              className="cursor-pointer"
-            >
-              Delete
-            </MenubarItem>
-          </MenubarContent>
-        </MenubarMenu>
-      </Menubar>
+          <Menubar className="border-none justify-end">
+            <MenubarMenu>
+              <MenubarTrigger className="cursor-pointer">
+                <Ellipsis />
+              </MenubarTrigger>
+              <MenubarContent>
+                <MenubarItem
+                  onClick={handleDeleteConv}
+                  variant="destructive"
+                  className="cursor-pointer"
+                >
+                  Delete
+                </MenubarItem>
+              </MenubarContent>
+            </MenubarMenu>
+          </Menubar>
+        </div>
+      )}
     </div>
   );
 };

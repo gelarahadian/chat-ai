@@ -4,6 +4,7 @@ import {
   getConversationById,
   getConversations,
   searchConversation,
+  shareConversation,
 } from "../services/conversationService";
 import { useEffect } from "react";
 
@@ -41,7 +42,6 @@ export const useSearchConversation = () => {
   });
 };
 
-
 export const useDeleteConversationById = (id: string) => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -49,5 +49,11 @@ export const useDeleteConversationById = (id: string) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["conversations"] });
     },
+  });
+};
+
+export const useShareConversation = () => {
+  return useMutation({
+    mutationFn: shareConversation,
   });
 };

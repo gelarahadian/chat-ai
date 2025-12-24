@@ -15,3 +15,7 @@ export const searchConversation = (q: string) => {
 export const deleteConversationById = (id: string) => {
   return api.delete(`/conversation/${id}`);
 };
+
+export const shareConversation = (id: string) => {
+  return api.post(`conversation/${id}/share`);
+};
