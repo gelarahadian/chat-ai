@@ -27,7 +27,7 @@ export const useGetConversationById = (id: string) => {
       setTimeout(() => {
         window.scrollTo({
           top: document.body.scrollHeight,
-          behavior: "auto",
+          behavior: "smooth",
         });
       }, 10);
     }
