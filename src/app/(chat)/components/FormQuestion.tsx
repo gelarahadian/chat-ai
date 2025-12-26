@@ -4,19 +4,23 @@ import { Textarea } from "@/src/components/ui/textarea";
 import { useCreateChat } from "@/src/hooks/use-chat";
 import { FC, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { ArrowDown, ArrowUp, Loader, Send } from "lucide-react";
+import { ArrowDown, ArrowUp } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface FormQuestionProps {
-  conversationId: string;
   createChatMutation: ReturnType<typeof useCreateChat>;
+  conversationId?: string;
+  chatIds?: string[];
 }
 
 const FormQuestion: FC<FormQuestionProps> = ({
   conversationId,
   createChatMutation,
+  chatIds,
 }) => {
   const { open } = useSidebar();
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const [question, setQuestion] = useState<string>("");
 
@@ -24,15 +28,23 @@ const FormQuestion: FC<FormQuestionProps> = ({
     e.preventDefault();
     createChatMutation.mutate(
       {
-        conversationId,
+        conversationId: conversationId ? conversationId : null,
         input: question,
+        chatIds: chatIds ? chatIds : [],
       },
       {
         onSuccess: (res) => {
           setQuestion("");
           queryClient.invalidateQueries({
-            queryKey: ["conversation", conversationId],
+            queryKey: ["conversations"],
           });
+          if (conversationId) {
+            queryClient.invalidateQueries({
+              queryKey: ["conversation", conversationId],
+            });
+          } else {
+            router.push(`/chat/${res.data.conversation._id}`);
+          }
         },
       }
     );

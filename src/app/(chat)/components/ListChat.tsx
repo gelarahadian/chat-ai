@@ -27,8 +27,6 @@ const ListChat: FC<ListChatProps> = ({ messages }) => {
     return "";
   }
 
-  // console.log(messages[1]?.content);
-
   return (
     <div ref={bottomRef} className="max-w-4xl mx-auto space-y-5 pb-28">
       {messages?.map((message: any) => (
