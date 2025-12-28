@@ -15,7 +15,7 @@ import {
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../../../components/ui/collapsible";
 import { useGetConversations } from "../../../hooks/use-conversation";
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -36,6 +36,7 @@ import { Skeleton } from "@/src/components/ui/skeleton";
 export function AppSidebar() {
   const { open } = useSidebar();
   const router = useRouter();
+  const pathname = usePathname();
 
   const meMutation = useMe();
   const { data, isLoading } = useGetConversations();
@@ -120,18 +121,24 @@ export function AppSidebar() {
                       </SidebarMenuButton>
                     </>
                   ) : (
-                    conversations?.map((conversation: any) => (
-                      <SidebarMenuButton
-                        key={conversation._id}
-                        className="cursor-pointer"
-                        onClick={() => router.push(`/chat/${conversation._id}`)}
-                      >
-                        {" "}
-                        <span className="block w-full truncate">
-                          {conversation.title}
-                        </span>
-                      </SidebarMenuButton>
-                    ))
+                    conversations?.map((conversation: any) => {
+                      const isActive = pathname.includes(conversation._id);
+                      return (
+                        <SidebarMenuButton
+                          isActive={isActive}
+                          key={conversation._id}
+                          className="cursor-pointer"
+                          onClick={() =>
+                            router.push(`/chat/${conversation._id}`)
+                          }
+                        >
+                          {" "}
+                          <span className="block w-full truncate">
+                            {conversation.title}
+                          </span>
+                        </SidebarMenuButton>
+                      );
+                    })
                   )}
                 </SidebarMenuSub>
               </CollapsibleContent>

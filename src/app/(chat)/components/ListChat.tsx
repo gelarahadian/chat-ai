@@ -3,17 +3,38 @@ import React, { FC, useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { CodeBlock } from "./CodeBlock";
+import { useGetConversationById } from "@/src/hooks/use-conversation";
 
 interface ListChatProps {
-  messages: any;
+  conversationId: string;
 }
 
-const ListChat: FC<ListChatProps> = ({ messages }) => {
+const ListChat: FC<ListChatProps> = ({ conversationId }) => {
+  const { data } = useGetConversationById(conversationId);
+
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "auto" });
-  }, []);
+    if (!bottomRef.current) return;
+
+    const container = bottomRef.current.parentElement;
+    if (!container) return;
+
+    const scrollToBottom = () => {
+      bottomRef.current?.scrollIntoView({ behavior: "auto" });
+    };
+
+    // scroll awal
+    scrollToBottom();
+
+    const observer = new ResizeObserver(() => {
+      scrollToBottom();
+    });
+
+    observer.observe(container);
+
+    return () => observer.disconnect();
+  }, [data]);
 
   function extractText(node: React.ReactNode): string {
     if (typeof node === "string") return node;
@@ -27,8 +48,10 @@ const ListChat: FC<ListChatProps> = ({ messages }) => {
     return "";
   }
 
+  const messages = data?.data?.conversation.messages;
+
   return (
-    <div ref={bottomRef} className="max-w-4xl mx-auto space-y-5 pb-28">
+    <div className="max-w-4xl mx-auto space-y-5 pb-28">
       {messages?.map((message: any) => (
         <div key={message._id}>
           {message.role === "user" ? (
@@ -71,6 +94,7 @@ const ListChat: FC<ListChatProps> = ({ messages }) => {
               </ReactMarkdown>
             </div>
           )}
+          <div ref={bottomRef} />
         </div>
       ))}
       <div />

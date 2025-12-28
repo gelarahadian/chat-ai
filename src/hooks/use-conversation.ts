@@ -22,16 +22,16 @@ export const useGetConversationById = (id: string) => {
     enabled: !!id,
   });
 
-  useEffect(() => {
-    if (query.data) {
-      setTimeout(() => {
-        window.scrollTo({
-          top: document.body.scrollHeight,
-          behavior: "smooth",
-        });
-      }, 10);
-    }
-  }, [query.data]);
+  // useEffect(() => {
+  //   if (query.data) {
+  //     setTimeout(() => {
+  //       window.scrollTo({
+  //         top: document.body.scrollHeight,
+  //         behavior: "instant",
+  //       });
+  //     }, 10);
+  //   }
+  // }, [query.data]);
 
   return query;
 };

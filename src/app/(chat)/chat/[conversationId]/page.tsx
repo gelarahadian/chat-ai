@@ -10,18 +10,18 @@ import Header from "../../components/Header";
 const page = ({ params }: { params: Promise<{ conversationId: string }> }) => {
   const { conversationId } = use(params);
 
-  const { data, isLoading } = useGetConversationById(conversationId);
+  const { isLoading } = useGetConversationById(conversationId);
+
   const createChatMutation = useCreateChat();
 
-  const conversation = data?.data.conversation;
   return (
     <>
       <Header conversationId={conversationId} />
       <div className="relative w-full lg:px-4 pt-12 ">
-        <ListChat messages={conversation?.messages} />
-        {conversation && (
+        <ListChat conversationId={conversationId} />
+        {!isLoading && (
           <FormQuestion
-            conversationId={conversation._id}
+            conversationId={conversationId}
             createChatMutation={createChatMutation}
           />
         )}
