@@ -14,6 +14,7 @@ import {
   ItemDescription,
   ItemTitle,
 } from "@/src/components/ui/item";
+import { Skeleton } from "@/src/components/ui/skeleton";
 import { useSearchConversation } from "@/src/hooks/use-conversation";
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
@@ -35,8 +36,10 @@ const SearchDialog = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
-    handleSearch(search);
-  }, [search]);
+    if (open) {
+      handleSearch(search);
+    }
+  }, [search, open]);
 
   const escapeRegex = (value: string) =>
     value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -142,35 +145,56 @@ const SearchDialog = ({ children }: { children: ReactNode }) => {
           />
         </DialogHeader>
         <div className="flex-1 overflow-y-scroll">
-          {results.map((result) => (
-            <Item
-              key={result._id}
-              onClick={() => handleChooseConversation(result._id)}
-              className="group"
-              size={"sm"}
-              asChild
-            >
-              <a>
-                <ItemContent>
-                  <ItemTitle className="font-normal gap-0 inline-block">
-                    {highlightText(result.title, search)}
-                  </ItemTitle>
-                  <ItemDescription className="line-clamp-1">
-                    {highlightText(result.assistantMessage?.content, search, {
-                      useEllipsis: true,
-                      beforeContextLength: 10,
-                      afterContextLength: 90,
-                    })}
-                  </ItemDescription>
-                </ItemContent>
-                <ItemActions className=" hidden group-hover:inline-block">
-                  <ItemDescription>
-                    {formatDateEnUTC(result.created_at)}
-                  </ItemDescription>
-                </ItemActions>
-              </a>
-            </Item>
-          ))}
+          {status === "pending" && (
+            <div className="space-y-3">
+              <div className="py-3 px-4">
+                <Skeleton className="w-1/2 h-4 mb-2" />
+                <Skeleton className="w-full h-4" />
+              </div>
+              <div className="py-3 px-4">
+                <Skeleton className="w-1/2 h-4 mb-2" />
+                <Skeleton className="w-full h-4" />
+              </div>
+              <div className="py-3 px-4">
+                <Skeleton className="w-1/2 h-4 mb-2" />
+                <Skeleton className="w-full h-4" />
+              </div>
+              <div className="py-3 px-4">
+                <Skeleton className="w-1/2 h-4 mb-2" />
+                <Skeleton className="w-full h-4" />
+              </div>
+            </div>
+          )}
+          {status === "success" &&
+            results.map((result) => (
+              <Item
+                key={result._id}
+                onClick={() => handleChooseConversation(result._id)}
+                className="group cursor-pointer"
+                size={"sm"}
+                asChild
+              >
+                <a>
+                  <ItemContent>
+                    <ItemTitle className="font-normal gap-0 inline-block">
+                      {highlightText(result.title, search)}
+                    </ItemTitle>
+                    <ItemDescription className="line-clamp-1">
+                      {highlightText(result.assistantMessage?.content, search, {
+                        useEllipsis: true,
+                        beforeContextLength: 10,
+                        afterContextLength: 90,
+                      })}
+                    </ItemDescription>
+                  </ItemContent>
+                  <ItemActions className=" hidden group-hover:inline-block">
+                    <ItemDescription>
+                      {formatDateEnUTC(result.created_at)}
+                    </ItemDescription>
+                  </ItemActions>
+                </a>
+              </Item>
+            ))}
         </div>
       </DialogContent>
     </Dialog>

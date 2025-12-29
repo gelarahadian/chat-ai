@@ -12,16 +12,15 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/src/components/ui/sidebar";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../../../components/ui/collapsible";
-import { useGetConversations } from "../../../hooks/use-conversation";
-import { useEffect } from "react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible";
+import { useGetConversations } from "../hooks/use-conversation";
 import { usePathname, useRouter } from "next/navigation";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../../../components/ui/dropdown-menu";
+} from "./ui/dropdown-menu";
 import {
   ChevronUp,
   MessageSquareMore,
@@ -29,8 +28,8 @@ import {
   SquarePen,
   User2,
 } from "lucide-react";
-import { useMe } from "../../../hooks/use-auth";
-import SearchDialog from "./search-dialog";
+import { useMe } from "../hooks/use-auth";
+import SearchDialog from "../app/(chat)/components/search-dialog";
 import { Skeleton } from "@/src/components/ui/skeleton";
 
 export function AppSidebar() {
@@ -38,15 +37,11 @@ export function AppSidebar() {
   const router = useRouter();
   const pathname = usePathname();
 
-  const meMutation = useMe();
-  const { data, isLoading } = useGetConversations();
+  const { data: meResponse, isLoading: meLoading } = useMe();
+  const { data: conversationsResponse, isLoading } = useGetConversations();
 
-  useEffect(() => {
-    meMutation.mutate();
-  }, []);
-
-  const user = meMutation.data?.data.user;
-  const conversations = data?.data.conversations;
+  const user = meResponse?.data.user;
+  const conversations = conversationsResponse?.data.conversations;
 
   const handleSingOut = () => {
     localStorage.removeItem("token");

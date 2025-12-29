@@ -6,6 +6,7 @@ import { FC, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useToken } from "@/src/hooks/use-token";
 
 interface FormQuestionProps {
   createChatMutation: ReturnType<typeof useCreateChat>;
@@ -19,6 +20,7 @@ const FormQuestion: FC<FormQuestionProps> = ({
   chatIds,
 }) => {
   const { open } = useSidebar();
+  const { token } = useToken();
   const queryClient = useQueryClient();
   const router = useRouter();
 
@@ -53,7 +55,7 @@ const FormQuestion: FC<FormQuestionProps> = ({
   return (
     <div
       className={`fixed bottom-0 right-0 ${
-        open ? "left-64" : "left-12"
+        !token ? "left-0" : open ? "left-64" : "left-12"
       } transition-all duration-200 ease-linear pb-8 bg-white`}
     >
       <div className="max-w-3xl w-full bg-gray-100 rounded-4xl mx-auto">

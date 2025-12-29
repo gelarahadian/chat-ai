@@ -20,6 +20,7 @@ import { Ellipsis, Share } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { FC } from "react";
 import ShareDialog from "./share-dialog";
+import { useToken } from "@/src/hooks/use-token";
 
 type HeaderProps = {
   conversationId?: string;
@@ -27,6 +28,7 @@ type HeaderProps = {
 
 const Header: FC<HeaderProps> = ({ conversationId }) => {
   const { open } = useSidebar();
+  const { token } = useToken();
 
   const router = useRouter();
 
@@ -45,7 +47,7 @@ const Header: FC<HeaderProps> = ({ conversationId }) => {
   return (
     <div
       className={` ${
-        open ? "left-64" : "left-12"
+        !token ? "left-0" : open ? "left-64" : "left-12"
       } flex justify-between items-center transition-all duration-200 ease-linear bg-white z-10 border-b fixed top-0 right-0 `}
     >
       <h2 className="ml-3 my-1">Chat AI</h2>
