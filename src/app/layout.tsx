@@ -4,6 +4,7 @@ import "./globals.css";
 import ReactQueryProvider from "../components/providers/ReactQueryProvider";
 import ToasterProvider from "../components/providers/ToasterProvider";
 import EventBusProvider from "../components/providers/EventBusProvider";
+import ContextProvider from "../components/providers/ContextProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,11 +32,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ReactQueryProvider>
-          <ToasterProvider>
-            <EventBusProvider>
-              {children}
-            </EventBusProvider>
-          </ToasterProvider>
+          <ContextProvider>
+            <ToasterProvider>
+              <EventBusProvider>{children}</EventBusProvider>
+            </ToasterProvider>
+          </ContextProvider>
         </ReactQueryProvider>
       </body>
     </html>

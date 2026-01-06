@@ -2,40 +2,24 @@
 
 import { Button } from '@/src/components/ui/button';
 import { Textarea } from '@/src/components/ui/textarea';
-import { useCreateChat } from '@/src/hooks/use-chat';
-import { useQueryClient } from '@tanstack/react-query';
-import { ArrowDown, ArrowUp, Loader, Send } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useChat } from "@/src/contexts/chat-context";
+import { ArrowUp, Loader, Send } from "lucide-react";
 import { useState } from "react";
 
 const NewChatForm = () => {
-  const router = useRouter();
-  const queryClient = useQueryClient();
-  const [question, setQuestion] = useState<string>("");
-
-  const { mutate: createChat, status } = useCreateChat();
+  const [input, setInput] = useState<string>("");
+  const { sendMessage } = useChat();
 
   const handleChat = (e: any) => {
     e.preventDefault();
-    createChat(
-      {
-        input: question,
-      },
-      {
-        onSuccess: (res) => {
-          queryClient.invalidateQueries({ queryKey: ["conversations"] });
-          router.push(`/chat/${res.data.conversation._id}`);
-          setQuestion("");
-        },
-      }
-    );
+    sendMessage({ input });
   };
   return (
     <div className="max-w-3xl w-full bg-gray-100 rounded-4xl">
       <form id="form-question" onSubmit={handleChat}>
         <div className="flex justify-between items-end space-x-4 px-3">
           <Textarea
-            onChange={(e: any) => setQuestion(e.target.value)}
+            onChange={(e: any) => setInput(e.target.value)}
             placeholder="Type your question here..."
             className="border-none max-h-96 focus-visible:ring-0"
           />
@@ -44,10 +28,10 @@ const NewChatForm = () => {
             className={`mb-3 rounded-full cursor-pointer ${
               status === "pending" ? "animate-pulse" : ""
             }`}
-            disabled={status === "pending" || !question}
+            disabled={status === "pending" || !input}
             type="submit"
           >
-            {status === "pending" ? <ArrowDown /> : <ArrowUp />}
+            <ArrowUp />
           </Button>
         </div>
       </form>

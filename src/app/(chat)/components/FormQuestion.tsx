@@ -7,6 +7,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useToken } from "@/src/hooks/use-token";
+import { useChat } from "@/src/contexts/chat-context";
 
 interface FormQuestionProps {
   createChatMutation: ReturnType<typeof useCreateChat>;
@@ -23,33 +24,17 @@ const FormQuestion: FC<FormQuestionProps> = ({
   const { token } = useToken();
   const queryClient = useQueryClient();
   const router = useRouter();
+  const { sendMessage } = useChat();
 
   const [question, setQuestion] = useState<string>("");
 
   const handleChat = (e: any) => {
     e.preventDefault();
-    createChatMutation.mutate(
-      {
-        conversationId: conversationId ? conversationId : null,
-        input: question,
-        chatIds: chatIds ? chatIds : [],
-      },
-      {
-        onSuccess: (res) => {
-          setQuestion("");
-          queryClient.invalidateQueries({
-            queryKey: ["conversations"],
-          });
-          if (conversationId) {
-            queryClient.invalidateQueries({
-              queryKey: ["conversation", conversationId],
-            });
-          } else {
-            router.push(`/chat/${res.data.conversation._id}`);
-          }
-        },
-      }
-    );
+    sendMessage({
+      input: question,
+      conversationId: conversationId ? conversationId : null,
+      chatIds: chatIds ? chatIds : [],
+    });
   };
 
   return (

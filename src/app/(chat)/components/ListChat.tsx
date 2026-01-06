@@ -4,6 +4,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { CodeBlock } from "./CodeBlock";
 import { useGetConversationById } from "@/src/hooks/use-conversation";
+import ChatResponse from "./ChatResponse";
 
 interface ListChatProps {
   conversationId: string;
@@ -94,9 +95,10 @@ const ListChat: FC<ListChatProps> = ({ conversationId }) => {
               </ReactMarkdown>
             </div>
           )}
-          <div ref={bottomRef} />
         </div>
       ))}
+      <ChatResponse conversationId={conversationId}/>
+      <div ref={bottomRef} />
       <div />
     </div>
   );
