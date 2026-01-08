@@ -72,6 +72,7 @@ const ChatResponse = ({conversationId}: {conversationId: string}) => {
       });
 
       setIsTypingFinished(false);
+      setMessage("");
     }
   }, [status]);
 
@@ -88,35 +89,44 @@ const ChatResponse = ({conversationId}: {conversationId: string}) => {
   }
 
   return (
-    <div className="prose prose-neutral max-w-none">
-      <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
-        components={{
-          p({ children }) {
-            if (
-              Array.isArray(children) &&
-              children.some(
-                (child: any) => child?.type === "pre" || child?.type === "div"
-              )
-            ) {
-              return <>{children}</>;
-            }
-            return <p>{children}</p>;
-          },
+    <>
+      {status !== "finished" ? (
+        <p className="whitespace-pre-wrap">{message}</p>
+      ) : (
+        <div className="prose prose-neutral max-w-none">
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            components={{
+              p({ children }) {
+                if (
+                  Array.isArray(children) &&
+                  children.some(
+                    (child: any) =>
+                      child?.type === "pre" || child?.type === "div"
+                  )
+                ) {
+                  return <>{children}</>;
+                }
+                return <p>{children}</p>;
+              },
 
-          code({ className, children }) {
-            const lang = className?.replace("language-", "") ?? "text";
+              code({ className, children }) {
+                const lang = className?.replace("language-", "") ?? "text";
 
-            return <CodeBlock language={lang} code={extractText(children)} />;
-          },
-          pre({ children }) {
-            return <>{children}</>;
-          },
-        }}
-      >
-        {message}
-      </ReactMarkdown>
-    </div>
+                return (
+                  <CodeBlock language={lang} code={extractText(children)} />
+                );
+              },
+              pre({ children }) {
+                return <>{children}</>;
+              },
+            }}
+          >
+            {message}
+          </ReactMarkdown>
+        </div>
+      )}
+    </>
   );
 };
 

@@ -2,7 +2,7 @@ import { Button } from "@/src/components/ui/button";
 import { useSidebar } from "@/src/components/ui/sidebar";
 import { Textarea } from "@/src/components/ui/textarea";
 import { useCreateChat } from "@/src/hooks/use-chat";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -21,10 +21,10 @@ const FormQuestion: FC<FormQuestionProps> = ({
   chatIds,
 }) => {
   const { open } = useSidebar();
-  const { token } = useToken();
+  const { token, isReady } = useToken();
   const queryClient = useQueryClient();
   const router = useRouter();
-  const { sendMessage } = useChat();
+  const { sendMessage, status } = useChat();
 
   const [question, setQuestion] = useState<string>("");
 
@@ -36,6 +36,14 @@ const FormQuestion: FC<FormQuestionProps> = ({
       chatIds: chatIds ? chatIds : [],
     });
   };
+
+  useEffect(() => {
+    if (status === "pending") {
+      setQuestion("");
+    }
+  }, [status]);
+
+  if (!isReady) return null;
 
   return (
     <div
@@ -58,7 +66,7 @@ const FormQuestion: FC<FormQuestionProps> = ({
                 createChatMutation.status === "pending" || question === ""
               }
               type="submit"
-              className={`mb-3 rounded-full ${
+              className={`mb-3 rounded-full cursor-pointer ${
                 createChatMutation.status === "pending" ? "animate-pulse" : ""
               }`}
             >

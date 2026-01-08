@@ -38,6 +38,8 @@ export const ChatProvider = ({children}: {children: React.ReactNode}) => {
     const router = useRouter();
     const queryClient = useQueryClient();
 
+    console.log(token);
+
     const sendMessage = async ({input, conversationId, chatIds}:{input: string, conversationId?: string | null, chatIds?: string[]}) => {
       setStatus('pending');
       

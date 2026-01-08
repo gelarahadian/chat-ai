@@ -28,7 +28,7 @@ type HeaderProps = {
 
 const Header: FC<HeaderProps> = ({ conversationId }) => {
   const { open } = useSidebar();
-  const { token } = useToken();
+  const { token, isReady } = useToken();
 
   const router = useRouter();
 
@@ -44,9 +44,10 @@ const Header: FC<HeaderProps> = ({ conversationId }) => {
     mutationDeleteConversationById.mutate();
     router.push("/");
   };
+  if (!isReady) return null;
   return (
     <div
-      className={` ${
+      className={`${
         !token ? "left-0" : open ? "left-64" : "left-12"
       } flex justify-between items-center transition-all duration-200 ease-linear bg-white z-10 border-b fixed top-0 right-0 `}
     >

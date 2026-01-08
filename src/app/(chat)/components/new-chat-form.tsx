@@ -3,12 +3,12 @@
 import { Button } from '@/src/components/ui/button';
 import { Textarea } from '@/src/components/ui/textarea';
 import { useChat } from "@/src/contexts/chat-context";
-import { ArrowUp, Loader, Send } from "lucide-react";
+import { ArrowUp } from "lucide-react";
 import { useState } from "react";
 
 const NewChatForm = () => {
   const [input, setInput] = useState<string>("");
-  const { sendMessage } = useChat();
+  const { sendMessage, status } = useChat();
 
   const handleChat = (e: any) => {
     e.preventDefault();
