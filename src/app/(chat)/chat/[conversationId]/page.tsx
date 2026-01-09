@@ -6,18 +6,26 @@ import ListChat from "../../components/ListChat";
 import FormQuestion from "../../components/FormQuestion";
 import { useCreateChat } from "@/src/hooks/use-chat";
 import Header from "../../components/Header";
+import { useScrollMessages } from "@/src/contexts/scroll-message-context";
 
 const page = ({ params }: { params: Promise<{ conversationId: string }> }) => {
   const { conversationId } = use(params);
-
-  const { isLoading } = useGetConversationById(conversationId);
-
+  const { data, isLoading } = useGetConversationById(conversationId);
   const createChatMutation = useCreateChat();
+  const { setMessages, containerRef } = useScrollMessages();
+
+  const messages = data?.data?.conversation.messages;
+
+  useEffect(() => {
+    if (messages) {
+      setMessages(messages);
+    }
+  }, [messages]);
 
   return (
-    <>
+    <div ref={containerRef} className="overflow-y-auto w-full">
       <Header conversationId={conversationId} />
-      <div className="relative w-full lg:px-4 pt-12 ">
+      <div className="relative w-full h-full lg:px-4 pt-12 ">
         <ListChat conversationId={conversationId} />
         {!isLoading && (
           <FormQuestion
@@ -26,7 +34,7 @@ const page = ({ params }: { params: Promise<{ conversationId: string }> }) => {
           />
         )}
       </div>
-    </>
+    </div>
   );
 };
 

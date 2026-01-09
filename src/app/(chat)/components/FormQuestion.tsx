@@ -47,7 +47,7 @@ const FormQuestion: FC<FormQuestionProps> = ({
 
   return (
     <div
-      className={`fixed bottom-0 right-0 ${
+      className={`sticky bottom-0 right-0 ${
         !token ? "left-0" : open ? "left-64" : "left-12"
       } transition-all duration-200 ease-linear pb-8 bg-white`}
     >

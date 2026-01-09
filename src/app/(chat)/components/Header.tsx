@@ -49,7 +49,7 @@ const Header: FC<HeaderProps> = ({ conversationId }) => {
     <div
       className={`${
         !token ? "left-0" : open ? "left-64" : "left-12"
-      } flex justify-between items-center transition-all duration-200 ease-linear bg-white z-10 border-b fixed top-0 right-0 `}
+      } flex justify-between items-center transition-all duration-200 ease-linear bg-white z-10 border-b sticky top-0 right-0 `}
     >
       <h2 className="ml-3 my-1">Chat AI</h2>
       {conversationId && (

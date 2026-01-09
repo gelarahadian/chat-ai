@@ -1,19 +1,17 @@
-import { Badge } from '@/src/components/ui/badge';
 import React, { FC, useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { CodeBlock } from "./CodeBlock";
-import { useGetConversationById } from "@/src/hooks/use-conversation";
 import ChatResponse from "./ChatResponse";
+import { useScrollMessages } from "@/src/contexts/scroll-message-context";
 
 interface ListChatProps {
   conversationId: string;
 }
 
 const ListChat: FC<ListChatProps> = ({ conversationId }) => {
-  const { data } = useGetConversationById(conversationId);
-
   const bottomRef = useRef<HTMLDivElement | null>(null);
+  const { visibleMessages, shouldAutoScrollRef } = useScrollMessages();
 
   useEffect(() => {
     if (!bottomRef.current) return;
@@ -25,17 +23,9 @@ const ListChat: FC<ListChatProps> = ({ conversationId }) => {
       bottomRef.current?.scrollIntoView({ behavior: "auto" });
     };
 
-    // scroll awal
+    if (!shouldAutoScrollRef.current) return;
     scrollToBottom();
-
-    const observer = new ResizeObserver(() => {
-      scrollToBottom();
-    });
-
-    observer.observe(container);
-
-    return () => observer.disconnect();
-  }, [data]);
+  }, [visibleMessages]);
 
   function extractText(node: React.ReactNode): string {
     if (typeof node === "string") return node;
@@ -49,11 +39,9 @@ const ListChat: FC<ListChatProps> = ({ conversationId }) => {
     return "";
   }
 
-  const messages = data?.data?.conversation.messages;
-
   return (
-    <div className="max-w-4xl mx-auto space-y-5 pb-28">
-      {messages?.map((message: any) => (
+    <div className="max-w-4xl mx-auto min-h-full space-y-5 pb-28">
+      {visibleMessages?.map((message: any) => (
         <div key={message._id}>
           {message.role === "user" ? (
             <div className="flex justify-end w-full ">
@@ -76,7 +64,7 @@ const ListChat: FC<ListChatProps> = ({ conversationId }) => {
                     ) {
                       return <>{children}</>;
                     }
-                    return <p>{children}</p>;
+                    return <>{children}</>;
                   },
 
                   code({ className, children }) {
@@ -97,11 +85,11 @@ const ListChat: FC<ListChatProps> = ({ conversationId }) => {
           )}
         </div>
       ))}
-      <ChatResponse conversationId={conversationId}/>
+      <ChatResponse conversationId={conversationId} />
       <div ref={bottomRef} />
       <div />
     </div>
   );
 };
 
-export default ListChat
+export default ListChat;

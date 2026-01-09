@@ -4,7 +4,6 @@ import { createContext, Dispatch, SetStateAction, useContext, useRef, useState }
 import { useToken } from "../hooks/use-token";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
-import ChatResponse from "../app/(chat)/components/ChatResponse";
 
 type ChatStatus = 
   | "idle"
@@ -37,8 +36,6 @@ export const ChatProvider = ({children}: {children: React.ReactNode}) => {
     const {token} = useToken();
     const router = useRouter();
     const queryClient = useQueryClient();
-
-    console.log(token);
 
     const sendMessage = async ({input, conversationId, chatIds}:{input: string, conversationId?: string | null, chatIds?: string[]}) => {
       setStatus('pending');
