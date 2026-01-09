@@ -41,7 +41,6 @@ export const ScrollMessageProvider = ({children}: {children: ReactNode}) => {
       const onScroll = () => {
         const scrollableHeight = el.scrollHeight - el.clientHeight;
 
-        // kalau konten belum cukup tinggi, jangan load
         if (scrollableHeight <= 0) return;
 
         const scrollRatio = el.scrollTop / scrollableHeight;

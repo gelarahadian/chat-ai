@@ -40,7 +40,7 @@ const ListChat: FC<ListChatProps> = ({ conversationId }) => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto min-h-full space-y-5 pb-28">
+    <div className="max-w-4xl mx-auto min-h-full space-y-5 pb-4">
       {visibleMessages?.map((message: any) => (
         <div key={message._id}>
           {message.role === "user" ? (

@@ -25,7 +25,7 @@ const page = ({ params }: { params: Promise<{ conversationId: string }> }) => {
   return (
     <div ref={containerRef} className="overflow-y-auto w-full">
       <Header conversationId={conversationId} />
-      <div className="relative w-full h-full lg:px-4 pt-12 ">
+      <div className="relative w-full h-full lg:px-4 pt-4 ">
         <ListChat conversationId={conversationId} />
         {!isLoading && (
           <FormQuestion
