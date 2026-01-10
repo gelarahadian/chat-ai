@@ -6,7 +6,7 @@ import ChatResponse from "./ChatResponse";
 import { useScrollMessages } from "@/src/contexts/scroll-message-context";
 
 interface ListChatProps {
-  conversationId: string;
+  conversationId?: string;
 }
 
 const ListChat: FC<ListChatProps> = ({ conversationId }) => {
@@ -45,7 +45,7 @@ const ListChat: FC<ListChatProps> = ({ conversationId }) => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto min-h-full space-y-5 pb-4">
+    <div className="max-w-4xl w-full mx-auto space-y-5 pb-4">
       {visibleMessages?.map((message: any) => (
         <div key={message._id}>
           {message.role === "user" ? (
@@ -90,7 +90,7 @@ const ListChat: FC<ListChatProps> = ({ conversationId }) => {
           )}
         </div>
       ))}
-      <ChatResponse conversationId={conversationId} />
+      {conversationId && <ChatResponse conversationId={conversationId} />}
       <div ref={bottomRef} />
       <div />
     </div>

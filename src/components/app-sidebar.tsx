@@ -33,6 +33,8 @@ import SearchDialog from "../app/(chat)/components/search-dialog";
 import { Skeleton } from "@/src/components/ui/skeleton";
 import { useScrollConversation } from "../contexts/scroll-conversation-context";
 import { useEffect } from "react";
+import { useAuth } from "../contexts/auth-context";
+import { tokenStore } from "../lib/tokenStore";
 
 export function AppSidebar() {
   const { open } = useSidebar();
@@ -40,6 +42,7 @@ export function AppSidebar() {
   const pathname = usePathname();
   const { setConversations, visibleConversations, containerRef } =
     useScrollConversation();
+  const { setToken } = useAuth();
 
   const { data: meResponse, isLoading: meLoading } = useMe();
   const { data: conversationsResponse, isLoading } = useGetConversations();
@@ -49,6 +52,9 @@ export function AppSidebar() {
 
   const handleSingOut = () => {
     localStorage.removeItem("token");
+    setToken(null);
+    tokenStore.setToken(null);
+
     router.push("/auth/sign-in");
   };
 

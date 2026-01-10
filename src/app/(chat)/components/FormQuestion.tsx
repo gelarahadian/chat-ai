@@ -6,8 +6,8 @@ import { FC, useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useToken } from "@/src/hooks/use-token";
 import { useChat } from "@/src/contexts/chat-context";
+import { useAuth } from "@/src/contexts/auth-context";
 
 interface FormQuestionProps {
   createChatMutation: ReturnType<typeof useCreateChat>;
@@ -21,7 +21,7 @@ const FormQuestion: FC<FormQuestionProps> = ({
   chatIds,
 }) => {
   const { open } = useSidebar();
-  const { token, isReady } = useToken();
+  const { token } = useAuth();
   const queryClient = useQueryClient();
   const router = useRouter();
   const { sendMessage, status } = useChat();
@@ -42,8 +42,6 @@ const FormQuestion: FC<FormQuestionProps> = ({
       setQuestion("");
     }
   }, [status]);
-
-  if (!isReady) return null;
 
   return (
     <div

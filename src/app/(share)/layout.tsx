@@ -2,20 +2,18 @@
 
 import { SidebarProvider } from "@/src/components/ui/sidebar";
 import { AppSidebar } from "../../components/app-sidebar";
-import { useToken } from "@/src/hooks/use-token";
+import { useAuth } from "@/src/contexts/auth-context";
 
 export default function ChatLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const {token} = useToken();
+  const { token } = useAuth();
 
   return (
-    <SidebarProvider className="flex">
-      {token && (
-        <AppSidebar /> 
-      )}
+    <SidebarProvider className="flex h-screen ">
+      {token && <AppSidebar />}
       {children}
     </SidebarProvider>
   );

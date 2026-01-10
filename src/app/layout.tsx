@@ -36,7 +36,7 @@ export default function RootLayout({
           <ContextProvider>
             <ToasterProvider>
               <EventBusProvider>
-                <ScrollMessageProvider>{children}</ScrollMessageProvider>
+                {children}
               </EventBusProvider>
             </ToasterProvider>
           </ContextProvider>

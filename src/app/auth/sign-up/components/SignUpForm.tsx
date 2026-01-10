@@ -144,7 +144,7 @@ const SignUpForm = () => {
         </form>
       </CardContent>
       <CardFooter>
-        <Field orientation="horizontal">
+        <Field orientation="horizontal" className="justify-end">
           <Button type="button" variant="outline" onClick={() => form.reset()}>
             Reset
           </Button>
@@ -154,7 +154,12 @@ const SignUpForm = () => {
         </Field>
       </CardFooter>
       <CardFooter className="justify-center">
-          <CardDescription>Already have an Account? <Link href={'/auth/sign-in'} className="font-medium">Sign In</Link></CardDescription>
+        <CardDescription>
+          Already have an Account?{" "}
+          <Link href={"/auth/sign-in"} className="font-medium">
+            Sign In
+          </Link>
+        </CardDescription>
       </CardFooter>
     </Card>
   );

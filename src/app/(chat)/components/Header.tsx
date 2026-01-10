@@ -20,7 +20,7 @@ import { Ellipsis, Share } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { FC } from "react";
 import ShareDialog from "./share-dialog";
-import { useToken } from "@/src/hooks/use-token";
+import { useAuth } from "@/src/contexts/auth-context";
 
 type HeaderProps = {
   conversationId?: string;
@@ -28,7 +28,7 @@ type HeaderProps = {
 
 const Header: FC<HeaderProps> = ({ conversationId }) => {
   const { open } = useSidebar();
-  const { token, isReady } = useToken();
+  const { token } = useAuth();
 
   const router = useRouter();
 
@@ -44,7 +44,7 @@ const Header: FC<HeaderProps> = ({ conversationId }) => {
     mutationDeleteConversationById.mutate();
     router.push("/");
   };
-  if (!isReady) return null;
+
   return (
     <div
       className={`${

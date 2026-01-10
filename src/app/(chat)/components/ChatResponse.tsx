@@ -7,7 +7,7 @@ import { CodeBlock } from "./CodeBlock";
 import { useChat } from "@/src/contexts/chat-context";
 import { useQueryClient } from "@tanstack/react-query";
 
-const TYPING_SPEED = 25;
+const TYPING_SPEED = 16;
 const INTERVAL = 1000 / TYPING_SPEED;
 
 const ChatResponse = ({conversationId}: {conversationId: string}) => {

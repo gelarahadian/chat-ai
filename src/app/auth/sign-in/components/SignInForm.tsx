@@ -20,7 +20,7 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "@/src/components/ui/f
 import { Input } from "@/src/components/ui/input";
 import { Button } from "@/src/components/ui/button";
 import { useSignIn } from "@/src/hooks/use-auth";
-
+import Link from "next/link";
 
 const SignInForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -34,16 +34,14 @@ const SignInForm = () => {
   const signInMutation = useSignIn();
 
   function onSubmit(data: z.infer<typeof formSchema>) {
-    signInMutation.mutate(data)
+    signInMutation.mutate(data);
   }
 
   return (
     <Card className="w-full sm:max-w-md">
       <CardHeader>
         <CardTitle>Sign In</CardTitle>
-        <CardDescription>
-          Help your need in chat AI
-        </CardDescription>
+        <CardDescription>Help your need in chat AI</CardDescription>
       </CardHeader>
       <CardContent>
         <form id="sign-in-form" onSubmit={form.handleSubmit(onSubmit)}>
@@ -53,9 +51,7 @@ const SignInForm = () => {
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="email">
-                    Email
-                  </FieldLabel>
+                  <FieldLabel htmlFor="email">Email</FieldLabel>
                   <Input
                     {...field}
                     id="email"
@@ -74,9 +70,7 @@ const SignInForm = () => {
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="password">
-                    Password
-                  </FieldLabel>
+                  <FieldLabel htmlFor="password">Password</FieldLabel>
                   <Input
                     {...field}
                     id="password"
@@ -95,7 +89,7 @@ const SignInForm = () => {
         </form>
       </CardContent>
       <CardFooter>
-        <Field orientation="horizontal">
+        <Field orientation="horizontal" className="justify-end">
           <Button type="button" variant="outline" onClick={() => form.reset()}>
             Reset
           </Button>
@@ -104,8 +98,16 @@ const SignInForm = () => {
           </Button>
         </Field>
       </CardFooter>
+      <CardFooter className="justify-center">
+        <CardDescription>
+          Don't have an account yet?{" "}
+          <Link href={"/auth/sign-up"} className="font-medium">
+            Sign Up
+          </Link>
+        </CardDescription>
+      </CardFooter>
     </Card>
   );
-}
+};
 
 export default SignInForm
