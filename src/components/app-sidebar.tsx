@@ -31,11 +31,15 @@ import {
 import { useMe } from "../hooks/use-auth";
 import SearchDialog from "../app/(chat)/components/search-dialog";
 import { Skeleton } from "@/src/components/ui/skeleton";
+import { useScrollConversation } from "../contexts/scroll-conversation-context";
+import { useEffect } from "react";
 
 export function AppSidebar() {
   const { open } = useSidebar();
   const router = useRouter();
   const pathname = usePathname();
+  const { setConversations, visibleConversations, containerRef } =
+    useScrollConversation();
 
   const { data: meResponse, isLoading: meLoading } = useMe();
   const { data: conversationsResponse, isLoading } = useGetConversations();
@@ -48,45 +52,54 @@ export function AppSidebar() {
     router.push("/auth/sign-in");
   };
 
+  useEffect(() => {
+    if (conversations) {
+      setConversations(conversations);
+    }
+  }, [conversations]);
+
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader>
-        <div
-          className={`flex items-center ${
-            open ? "justify-between" : "justify-center"
-          }`}
-        >
-          {open && (
-            <SidebarMenuButton
-              className="cursor-pointer"
-              onClick={() => router.push("/")}
+      <SidebarContent ref={containerRef}>
+        <div className="sticky top-0 flex flex-col z-10 gap-2 bg-white">
+          <SidebarHeader>
+            <div
+              className={`flex items-center ${
+                open ? "justify-between" : "justify-center"
+              }`}
             >
-              Chat AI
-            </SidebarMenuButton>
-          )}
-          <SidebarTrigger className="cursor-pointer" />
-        </div>
-      </SidebarHeader>
-      <SidebarContent className={`p-2`}>
-        <SidebarMenu>
-          <SidebarMenuButton asChild onClick={() => router.push("/")}>
-            <div className="cursor-pointer">
-              <SquarePen />
-              <span>New Chat</span>
+              {open && (
+                <SidebarMenuButton
+                  className="cursor-pointer"
+                  onClick={() => router.push("/")}
+                >
+                  Chat AI
+                </SidebarMenuButton>
+              )}
+              <SidebarTrigger className="cursor-pointer" />
             </div>
-          </SidebarMenuButton>
-        </SidebarMenu>
-        <SidebarMenu>
-          <SearchDialog>
-            <SidebarMenuButton asChild>
+          </SidebarHeader>
+          <SidebarMenu className="pl-2">
+            <SidebarMenuButton asChild onClick={() => router.push("/")}>
               <div className="cursor-pointer">
-                <Search />
-                <span>Search chats</span>
+                <SquarePen />
+                <span>New Chat</span>
               </div>
             </SidebarMenuButton>
-          </SearchDialog>
-        </SidebarMenu>
-        <SidebarMenu>
+          </SidebarMenu>
+          <SidebarMenu className="pl-2">
+            <SearchDialog>
+              <SidebarMenuButton asChild>
+                <div className="cursor-pointer">
+                  <Search />
+                  <span>Search chats</span>
+                </div>
+              </SidebarMenuButton>
+            </SearchDialog>
+          </SidebarMenu>
+        </div>
+
+        <SidebarMenu className="pl-2">
           <Collapsible defaultOpen className="group/collapsible">
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
@@ -116,7 +129,7 @@ export function AppSidebar() {
                       </SidebarMenuButton>
                     </>
                   ) : (
-                    conversations?.map((conversation: any) => {
+                    visibleConversations?.map((conversation: any) => {
                       const isActive = pathname.includes(conversation._id);
                       return (
                         <SidebarMenuButton
@@ -140,30 +153,30 @@ export function AppSidebar() {
             </SidebarMenuItem>
           </Collapsible>
         </SidebarMenu>
+        <SidebarFooter className="sticky mt-auto bottom-0 bg-white">
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <SidebarMenuButton className="cursor-pointer">
+                    <User2 /> {user?.name ? user.name : "Username"}
+                    <ChevronUp className="ml-auto" />
+                  </SidebarMenuButton>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent side="top" className="w-[240px]">
+                  <DropdownMenuItem
+                    variant="destructive"
+                    className="cursor-pointer"
+                    onClick={handleSingOut}
+                  >
+                    <span>Sign out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
       </SidebarContent>
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton className="cursor-pointer">
-                  <User2 /> {user?.name ? user.name : "Username"}
-                  <ChevronUp className="ml-auto" />
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent side="top" className="w-[240px]">
-                <DropdownMenuItem
-                  variant="destructive"
-                  className="cursor-pointer"
-                  onClick={handleSingOut}
-                >
-                  <span>Sign out</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
     </Sidebar>
   );
 }

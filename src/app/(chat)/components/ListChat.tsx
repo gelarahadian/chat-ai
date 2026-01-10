@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef } from "react";
+import React, { FC, useEffect, useLayoutEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { CodeBlock } from "./CodeBlock";
@@ -19,13 +19,18 @@ const ListChat: FC<ListChatProps> = ({ conversationId }) => {
     const container = bottomRef.current.parentElement;
     if (!container) return;
 
-    const scrollToBottom = () => {
-      bottomRef.current?.scrollIntoView({ behavior: "auto" });
-    };
+    const resizeObserver = new ResizeObserver(() => {
+      if (!shouldAutoScrollRef.current) return;
 
-    if (!shouldAutoScrollRef.current) return;
-    scrollToBottom();
-  }, [visibleMessages]);
+      bottomRef.current?.scrollIntoView({
+        behavior: "auto",
+      });
+    });
+
+    resizeObserver.observe(container);
+
+    return () => resizeObserver.disconnect();
+  }, []);
 
   function extractText(node: React.ReactNode): string {
     if (typeof node === "string") return node;
