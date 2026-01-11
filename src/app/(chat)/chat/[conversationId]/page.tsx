@@ -14,7 +14,7 @@ const page = ({ params }: { params: Promise<{ conversationId: string }> }) => {
   const createChatMutation = useCreateChat();
   const { setMessages, containerRef } = useScrollMessages();
 
-  const messages = data?.data?.conversation.messages;
+  const messages = data?.data?.data.messages;
 
   useEffect(() => {
     if (messages) {
@@ -25,7 +25,7 @@ const page = ({ params }: { params: Promise<{ conversationId: string }> }) => {
   return (
     <div ref={containerRef} className="overflow-y-auto w-full">
       <Header conversationId={conversationId} />
-      <div className="relative w-full h-full flex flex-col justify-between lg:px-4 pt-4 ">
+      <div className="relative w-full min-h-full flex flex-col justify-between lg:px-4 pt-4 ">
         <ListChat conversationId={conversationId} />
         {!isLoading && (
           <FormQuestion

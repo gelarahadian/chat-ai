@@ -6,7 +6,6 @@ import {
   searchConversation,
   shareConversation,
 } from "../services/conversationService";
-import { useEffect } from "react";
 
 export const useGetConversations = () => {
   return useQuery({

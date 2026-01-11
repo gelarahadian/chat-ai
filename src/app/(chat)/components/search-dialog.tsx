@@ -26,11 +26,11 @@ const SearchDialog = ({ children }: { children: ReactNode }) => {
 
   const router = useRouter();
   const { mutate: searchConversation, status } = useSearchConversation();
-
+  
   const handleSearch = (search: string) => {
     searchConversation(search, {
       onSuccess: (res) => {
-        setResults(res.data.results);
+        setResults(res.data.data);
       },
     });
   };

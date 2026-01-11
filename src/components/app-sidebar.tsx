@@ -48,7 +48,7 @@ export function AppSidebar() {
   const { data: conversationsResponse, isLoading } = useGetConversations();
 
   const user = meResponse?.data.user;
-  const conversations = conversationsResponse?.data.conversations;
+  const conversations = conversationsResponse?.data.data;
 
   const handleSingOut = () => {
     localStorage.removeItem("token");

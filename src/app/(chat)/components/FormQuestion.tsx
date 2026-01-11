@@ -3,9 +3,7 @@ import { useSidebar } from "@/src/components/ui/sidebar";
 import { Textarea } from "@/src/components/ui/textarea";
 import { useCreateChat } from "@/src/hooks/use-chat";
 import { FC, useEffect, useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
 import { ArrowDown, ArrowUp } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useChat } from "@/src/contexts/chat-context";
 import { useAuth } from "@/src/contexts/auth-context";
 
@@ -22,8 +20,6 @@ const FormQuestion: FC<FormQuestionProps> = ({
 }) => {
   const { open } = useSidebar();
   const { token } = useAuth();
-  const queryClient = useQueryClient();
-  const router = useRouter();
   const { sendMessage, status } = useChat();
 
   const [question, setQuestion] = useState<string>("");
