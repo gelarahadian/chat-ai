@@ -54,7 +54,7 @@ const Header: FC<HeaderProps> = ({ conversationId }) => {
       <h2 className="ml-3 my-1">Chat AI</h2>
       {conversationId && (
         <div className="flex">
-          <NavigationMenu>
+          <NavigationMenu className="h-10">
             <NavigationMenuList>
               <NavigationMenuItem>
                 <ShareDialog conversationId={conversationId}>
@@ -66,7 +66,7 @@ const Header: FC<HeaderProps> = ({ conversationId }) => {
             </NavigationMenuList>
           </NavigationMenu>
 
-          <Menubar className="border-none justify-end">
+          <Menubar className="border-none justify-end h-10">
             <MenubarMenu>
               <MenubarTrigger className="cursor-pointer">
                 <Ellipsis />
