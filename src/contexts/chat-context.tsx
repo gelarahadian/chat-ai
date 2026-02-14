@@ -94,6 +94,9 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
           });
         } else if (data.type === "token") {
           bufferRef.current += data.token;
+        } else if (data.type === "error") {
+          toast.error(data.message);
+          setStatus("idle");
         } else if (data.type === "done") {
           setStatus("stream_done");
         }
