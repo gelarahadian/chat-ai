@@ -2,18 +2,17 @@
 
 import { SidebarProvider } from "@/src/components/ui/sidebar";
 import { AppSidebar } from "../../components/app-sidebar";
-import { useAuth } from "@/src/contexts/auth-context";
+import { useMe } from "@/src/hooks/use-auth";
 
 export default function ChatLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { token } = useAuth();
-
+  const { data: me } = useMe();
   return (
     <SidebarProvider className="flex h-screen ">
-      {token && <AppSidebar />}
+      {me && <AppSidebar />}
       {children}
     </SidebarProvider>
   );

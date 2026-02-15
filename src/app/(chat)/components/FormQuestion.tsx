@@ -5,7 +5,7 @@ import { useCreateChat } from "@/src/hooks/use-chat";
 import { FC, useEffect, useState } from "react";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { useChat } from "@/src/contexts/chat-context";
-import { useAuth } from "@/src/contexts/auth-context";
+import { useMe } from "@/src/hooks/use-auth";
 
 interface FormQuestionProps {
   createChatMutation: ReturnType<typeof useCreateChat>;
@@ -19,8 +19,8 @@ const FormQuestion: FC<FormQuestionProps> = ({
   chatIds,
 }) => {
   const { open } = useSidebar();
-  const { token } = useAuth();
   const { sendMessage, status } = useChat();
+  const { data: me } = useMe();
 
   const [question, setQuestion] = useState<string>("");
 
@@ -42,7 +42,7 @@ const FormQuestion: FC<FormQuestionProps> = ({
   return (
     <div
       className={`sticky bottom-0 right-0 ${
-        !token ? "left-0" : open ? "left-64" : "left-12"
+        !me ? "left-0" : open ? "left-64" : "left-12"
       } transition-all duration-200 ease-linear pb-8 bg-white`}
     >
       <div className="max-w-3xl w-full bg-gray-100 rounded-4xl mx-auto">

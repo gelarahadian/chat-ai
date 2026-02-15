@@ -20,7 +20,7 @@ import { Ellipsis, Share } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { FC } from "react";
 import ShareDialog from "./share-dialog";
-import { useAuth } from "@/src/contexts/auth-context";
+import { useMe } from "@/src/hooks/use-auth";
 
 type HeaderProps = {
   conversationId?: string;
@@ -28,9 +28,9 @@ type HeaderProps = {
 
 const Header: FC<HeaderProps> = ({ conversationId }) => {
   const { open } = useSidebar();
-  const { token } = useAuth();
 
   const router = useRouter();
+  const { data: me } = useMe();
 
   let mutationDeleteConversationById: ReturnType<
     typeof useDeleteConversationById
@@ -48,7 +48,7 @@ const Header: FC<HeaderProps> = ({ conversationId }) => {
   return (
     <div
       className={`${
-        !token ? "left-0" : open ? "left-64" : "left-12"
+        !me ? "left-0" : open ? "left-64" : "left-12"
       } flex justify-between items-center transition-all duration-200 ease-linear bg-white z-10 border-b sticky top-0 right-0 `}
     >
       <h2 className="ml-3 my-1">Chat AI</h2>
