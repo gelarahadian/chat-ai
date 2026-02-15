@@ -11,7 +11,6 @@ import {
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { useAuth } from "./auth-context";
 
 type ChatStatus = "idle" | "pending" | "stream_done" | "typing" | "finished";
 
@@ -35,7 +34,6 @@ const ChatContext = createContext<ChatContextType | null>(null);
 export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
   const [status, setStatus] = useState<ChatStatus>("idle");
   const bufferRef = useRef("");
-  const { token } = useAuth();
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -48,11 +46,6 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     conversationId?: string | null;
     chatIds?: string[];
   }) => {
-    if (!token) {
-      toast.error("You are not logged in");
-      router.push("/auth/sign-in");
-      return;
-    }
     setStatus("pending");
 
     bufferRef.current = "";
@@ -62,8 +55,8 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
       body: JSON.stringify({ input, conversationId, chatIds }),
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
       },
+      credentials: "include",
     });
 
     const reader = res.body!.getReader();
