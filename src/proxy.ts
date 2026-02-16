@@ -1,24 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export async function proxy(req: NextRequest) {
-    const token = req.cookies.get("token")?.value;
+  const token = req.cookies.get("token")?.value;
+  const { pathname } = req.nextUrl;
 
-     const isAuthPage = req.nextUrl.pathname.startsWith("/auth");
-     const isProtectedPage =
-       req.nextUrl.pathname.startsWith("/chat") ||
-       req.nextUrl.pathname.startsWith("/dashboard");
+  const protectedRoutes = ["/chat", "/dashboard", "/settings", "/profile"];
 
-         if (token && isAuthPage) {
-           return NextResponse.redirect(new URL("/chat", req.url));
-         }
+  const isProtected = protectedRoutes.some((route) =>
+    pathname.startsWith(route),
+  );
 
-         if (!token && isProtectedPage) {
-           return NextResponse.redirect(new URL("/auth/sign-in", req.url));
-         }
+  const isAuthPage = pathname.startsWith("/auth");
 
-    return NextResponse.next();
+  if (!token && isProtected) {
+    return NextResponse.redirect(new URL("/auth/sign-in", req.url));
+  }
+  if (token && isAuthPage) {
+    return NextResponse.redirect(new URL("/chat", req.url));
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
-    matcher: ["/auth/:path*", "/chat/:path*", "/dashboard/:path*"],
-}
+  matcher: ["/:path*", "/auth/:path*", "/chat/:path*", "/dashboard/:path*"],
+};
