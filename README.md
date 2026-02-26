@@ -5,6 +5,12 @@ Built using Next.js and Tailwind CSS with clean and responsive UI.
 
 ---
 
+## Demo User
+ - email: huhu@gmail.com
+ - password: Huhuhuhu
+
+---
+
 ## ✨ Features
 - Real-time Streaming Response
 - Modern Chat UI
@@ -21,11 +27,6 @@ Built using Next.js and Tailwind CSS with clean and responsive UI.
 - Tailwind CSS
 - shadcn/ui
 - Axios / Fetch API
-
----
-
-## 📸 Screenshots
-(Add your UI screenshots or GIF demo here)
 
 ---
 
