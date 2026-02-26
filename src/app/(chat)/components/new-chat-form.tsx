@@ -6,7 +6,7 @@ import { useChat } from "@/src/contexts/chat-context";
 import { ArrowUp } from "lucide-react";
 import { useState } from "react";
 
-const NewChatForm = () => {
+const   NewChatForm = () => {
   const [input, setInput] = useState<string>("");
   const { sendMessage, status } = useChat();
 

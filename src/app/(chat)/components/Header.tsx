@@ -14,12 +14,12 @@ import {
   NavigationMenuList,
 } from "@/src/components/ui/navigation-menu";
 
-import { useSidebar } from "@/src/components/ui/sidebar";
 import { useDeleteConversationById } from "@/src/hooks/use-conversation";
-import { Ellipsis, Share } from "lucide-react";
+import { Ellipsis, Share, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { FC } from "react";
 import ShareDialog from "./share-dialog";
+import { Button } from "@/src/components/ui/button";
 import { useMe } from "@/src/hooks/use-auth";
 
 type HeaderProps = {
@@ -27,8 +27,6 @@ type HeaderProps = {
 };
 
 const Header: FC<HeaderProps> = ({ conversationId }) => {
-  const { open } = useSidebar();
-
   const router = useRouter();
   const { data: me } = useMe();
 
@@ -47,9 +45,7 @@ const Header: FC<HeaderProps> = ({ conversationId }) => {
 
   return (
     <div
-      className={`${
-        !me ? "left-0" : open ? "left-64" : "left-12"
-      } flex justify-between items-center transition-all duration-200 ease-linear bg-white z-10 border-b sticky top-0 right-0 `}
+      className={`flex justify-between items-center transition-all duration-200 ease-linear bg-white z-10 border-b sticky top-0 right-0 `}
     >
       <h2 className="ml-3 my-1">Chat AI</h2>
       {conversationId && (
@@ -82,6 +78,24 @@ const Header: FC<HeaderProps> = ({ conversationId }) => {
               </MenubarContent>
             </MenubarMenu>
           </Menubar>
+        </div>
+      )}
+      {!me && (
+        <div className="flex p-2 space-x-3">
+          <Button
+            variant="secondary"
+            className="cursor-pointer"
+            onClick={() => router.push("/auth/sign-up")}
+          >
+            <User /> Register
+          </Button>
+          <Button
+            variant="outline"
+            className="cursor-pointer"
+            onClick={() => router.push("/auth/sign-in")}
+          >
+            Login
+          </Button>
         </div>
       )}
     </div>
